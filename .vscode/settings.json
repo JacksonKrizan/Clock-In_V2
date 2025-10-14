@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "SplatterStormV2.sln"
+    "dotnet.defaultSolution": "Clock-In_V2.sln"
 }

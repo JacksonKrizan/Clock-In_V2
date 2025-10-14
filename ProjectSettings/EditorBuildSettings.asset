@@ -6,15 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/FPSMenu.unity
+    path: Assets/Scenes/Menu.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/Airport.unity
     guid: 5f5ec71da8f67934c89cf9bf2c3bdf67
-  - enabled: 1
-    path: Assets/Scenes/LowPolyFPS_Lite_Demo.unity
-    guid: 130de191e9bf7de41a659f68e5741ed0
-  - enabled: 0
-    path: Assets/Scenes/Game.unity
-    guid: bdf60f7a0513a8444bc8ed595fd0b27e
   m_configObjects: {}
