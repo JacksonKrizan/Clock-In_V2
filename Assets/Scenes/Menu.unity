@@ -2842,7 +2842,7 @@ MonoBehaviour:
   PlayerListItemPrefab: {fileID: 984883221938537973, guid: 1352b424a8fb0074cad85d700a6cddb0, type: 3}
   startGameButton: {fileID: 636918631}
   mapsChoices: 
-  mapNumber: 0
+  mapNumber: 1
 --- !u!114 &1305601415
 MonoBehaviour:
   m_ObjectHideFlags: 0

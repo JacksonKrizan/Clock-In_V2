@@ -92,7 +92,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     }
     public void StartGame()
     {
-        PhotonNetwork.LoadLevel(mapsChoices[mapNumber]);
+        PhotonNetwork.LoadLevel(1/*mapsChoices[mapNumber]*/);  // hard coded rn but change later to make it so you can choose your map
     }
     public void LeaveRoom()
     {
