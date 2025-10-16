@@ -1,6 +1,10 @@
 # JobSim
 ****Don't rename the Resources folder****
 
+
+Keep Unreliable On Change for player position and rotation syncing — that’s the right setting.
+Use Reliable or Reliable Delta Compressed only for data that must always arrive (like scores, health, or inventory).
+
 A game about how it feels to have different jobs
 
 Create an engaging game where players jump into mini-worlds that showcase different careers. In each career world, players must: 
