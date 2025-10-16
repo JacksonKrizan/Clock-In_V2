@@ -34,6 +34,8 @@ void Awake()
     void Update()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        if(Input.GetKeyDown(KeyCode.Escape))
+            Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
         if (!PV.IsMine)
