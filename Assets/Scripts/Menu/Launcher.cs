@@ -35,27 +35,13 @@ public class Launcher : MonoBehaviourPunCallbacks
     }
     public void OnMapNumberInputValueChanged()
     {
-        // Called while the TMP input value changes. Don't overwrite the input
-        // text here — that will reset the user's typing. Instead, try to parse
-        // the current input and update the backing int if valid.
-        if (mapNumberInput == null)
-            return;
-
-        string txt = mapNumberInput.text;
-        if (string.IsNullOrEmpty(txt))
+        if (string.IsNullOrEmpty(mapNumberInput.text))
         {
-            // Let the user type; don't clobber the field on empty input.
+            mapNumber = 1;
+            mapNumberInput.text = mapNumber.ToString();
             return;
         }
-
-        int parsed;
-        if (int.TryParse(txt, out parsed))
-        {
-            // Keep a sensible minimum (1) to avoid loading map 0.
-            mapNumber = Mathf.Max(1, parsed);
-        }
-        // If parsing fails, we leave the text as-is. Optionally you can sanitize
-        // non-digit characters here and write back once (preferably on EndEdit).
+        mapNumberInput.text = mapNumber.ToString();
     }
     public override void OnConnectedToMaster()
     {

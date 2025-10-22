@@ -22,6 +22,8 @@ public class PlayerManager : MonoBehaviour
     }
     void CreateController()
     {
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
+        // PhotonNetwork.Instantiate expects a Resources path using forward slashes.
+        // Avoid Path.Combine because it uses backslashes on Windows which break Resources.Load.
+        PhotonNetwork.Instantiate("PhotonPrefabs/PlayerController", Vector3.zero, Quaternion.identity);
     }
 }
