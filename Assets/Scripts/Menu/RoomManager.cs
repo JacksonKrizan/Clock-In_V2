@@ -7,7 +7,8 @@ using System.IO;
 public class RoomManager : MonoBehaviourPunCallbacks
 {
     public static RoomManager Instance;
-    public Launcher mapChoose;
+    public Launcher mapNumber;
+    
     private void Awake()
     {
         if (Instance)
@@ -27,10 +28,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
-        if (scene.buildIndex == mapNumber)
-        {
+        //if (scene.buildIndex == mapSetting.mapNumber)
+        //{
             PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
-        }
+        //}
     }
 
 }
