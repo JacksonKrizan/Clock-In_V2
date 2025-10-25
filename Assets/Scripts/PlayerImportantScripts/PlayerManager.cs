@@ -55,10 +55,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     }
     void CreateController()//makes the player
     {
+        Debug.Log("Creating player controller");
         //Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
         //controller =
         //PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
         PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
+        Debug.Log("made mankind a thing");
     }
     
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -72,6 +74,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             {
                 PhotonView pv = player.GetComponent<PhotonView>();
                 pv.RPC("SyncExistingPlayer", newPlayer);
+                Debug.Log("Syncing player for new player");
             }
         }
     }
