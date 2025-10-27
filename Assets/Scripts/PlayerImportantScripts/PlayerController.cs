@@ -44,6 +44,7 @@ void Awake()
         Look();
         Move();
         Jump();
+        EscapeGame();
     }
 
 
@@ -81,5 +82,13 @@ void Awake()
             return;
 
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);//movement speed isn't from fps but form fixed delta time
+    }
+    private void EscapeGame()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 }

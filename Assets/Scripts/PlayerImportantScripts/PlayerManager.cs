@@ -56,9 +56,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     void CreateController()//makes the player
     {
-        Debug.Log("Creating player controller");
+        //Debug.Log("Creating player controller");
+
+        //PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
         
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
+        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] {PV.ViewID});
        
     }
     
