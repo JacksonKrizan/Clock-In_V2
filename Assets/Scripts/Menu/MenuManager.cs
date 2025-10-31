@@ -41,8 +41,4 @@ public class MenuManager : MonoBehaviour
     {
         menu.Close();
     }
-    public void ExitGame()
-    {
-        Application.Quit();
-    }
 }

@@ -4,8 +4,6 @@
 Reread FBLA requirements 
 
 
-MAKE LOBBIES MORE FUNCTRIONAL LIKE PRIVATE LOBBIES PASSWORDS DISCRIPTIONS IN MENU ABOUT LOBBY ETC=
-
 
 Keep Unreliable On Change for player position and rotation syncing — that’s the right setting.
 Use Reliable or Reliable Delta Compressed only for data that must always arrive (like scores, health, or inventory).

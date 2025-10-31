@@ -53,27 +53,16 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             CreateController();
         }
     }
+
     void CreateController()//makes the player
     {
-<<<<<<< HEAD
-        //Debug.Log("Creating player controller");
-
-        //PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
-        
-        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] {PV.ViewID});
-       
-=======
         Debug.Log("Creating player controller");
-        //Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        //controller =
-        //PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
+        
         PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
-        Debug.Log("made mankind a thing");
->>>>>>> parent of e5a49e6 (yeah it workss!!!!?)
+       
     }
     
-    public override void OnPlayerEnteredRoom(Player newPlayer)
+    /*public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log("New Player Joined: " + newPlayer.NickName);
 
@@ -87,7 +76,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                 Debug.Log("Syncing player for new player");
             }
         }
-    }
+    }*/
     public static PlayerManager Find(Player player)
     {
         return FindObjectsOfType<PlayerManager>().SingleOrDefault(x => x.PV.Owner == player);

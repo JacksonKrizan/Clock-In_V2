@@ -22,7 +22,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     public int mapNumber = 1;
     [SerializeField] TMP_InputField mapNumberInput = null;
     [SerializeField] List<GameObject> noShowForNonMasterClient;// = new List<GameObject>();
-    public List<string> mapOption;
 
     void Awake()
     {
@@ -124,10 +123,6 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(info.Name);
         MenuManager.Instance.OpenMenu("loading");
     }
-    public void OpenQuitMenu()
-    {
-        MenuManager.Instance.OpenMenu("exit");
-    }
 
     public override void OnLeftRoom()
     {
@@ -150,9 +145,5 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
-    }
-    public void MapOption3DMenu()
-    {
-        PhotonNetwork.LoadLevel(1);
     }
 }
