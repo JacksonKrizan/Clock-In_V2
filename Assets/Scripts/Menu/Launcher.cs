@@ -19,7 +19,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] Transform playerListContent;
     [SerializeField] GameObject PlayerListItemPrefab;
 
-    public int mapNumber = 1;
+    public int mapNumber = 2;
     [SerializeField] TMP_InputField mapNumberInput = null;
     [SerializeField] List<GameObject> noShowForNonMasterClient;// = new List<GameObject>();
     public List<string> mapOption;
@@ -34,16 +34,16 @@ public class Launcher : MonoBehaviourPunCallbacks
         Debug.Log("Connecting to Master");
         PhotonNetwork.ConnectUsingSettings();
     }
-    public void OnMapNumberInputValueChanged()
+    /*public void OnMapNumberInputValueChanged()
     {
         if (string.IsNullOrEmpty(mapNumberInput.text))
         {
-            mapNumber = 1;
+            mapNumber = 2;
             mapNumberInput.text = mapNumber.ToString();
             return;
         }
         mapNumberInput.text = mapNumber.ToString();
-    }
+    }*/
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to Master");
@@ -110,7 +110,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     }
     public void StartGame()
     {
-        PhotonNetwork.LoadLevel(mapNumber);
+        //PhotonNetwork.LoadLevel(mapNumber); //very important to change this later becuase right now it is just loading the default map but we want to load the map that the player has selected in the menu. 
+        PhotonNetwork.LoadLevel(2);
+            
     }
     public void LeaveRoom()
     {

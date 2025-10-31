@@ -7,7 +7,7 @@ using System.IO;
 public class RoomManager : MonoBehaviourPunCallbacks
 {
     public static RoomManager Instance;
-    public Launcher mapNumber;
+    //public Launcher mapNumber;
     
     private void Awake()
     {
@@ -28,10 +28,22 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
-        //if (scene.buildIndex == mapSetting.mapNumber)
-        //{
-            PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
-        //}
+        if (scene.buildIndex != 0) // Don't spawn in menu (scene 0)
+        {
+            // Use forward slashes for Photon resource paths
+            string playerManagerPath = "PhotonPrefabs/PlayerManager";
+            
+            // Verify the prefab exists before trying to instantiate
+            if (Resources.Load(playerManagerPath) != null)
+            {
+                PhotonNetwork.Instantiate(playerManagerPath, Vector3.zero, Quaternion.identity);
+                Debug.Log($"PlayerManager instantiated in scene {scene.buildIndex}");
+            }
+            else
+            {
+                Debug.LogError($"Failed to find PlayerManager prefab at Resources/{playerManagerPath}");
+            }
+        }
     }
 
 }

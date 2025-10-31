@@ -11,8 +11,8 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
-    /*PhotonView PV;
-    private void Awake()
+    //PhotonView PV;
+    /*private void Awake()
     {
         PV = GetComponent<PhotonView>();
     }
@@ -27,7 +27,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     //void CreateController()
     //{
     //    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
-    //}
+    }
     void CreateController()//makes the player
     {
         Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
@@ -54,15 +54,44 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
     }
 
-    void CreateController()//makes the player
+    void CreateController()
     {
-        //Debug.Log("Creating player controller");
+        Debug.Log("Attempting to create player controller...");
 
-        //PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
-        
+        // Check if SpawnManager exists
+        if (SpawnManager.Instance == null)
+        {
+            Debug.LogError("SpawnManager.Instance is null! Make sure SpawnManager exists in the scene.");
+            return;
+        }
+
         Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] {PV.ViewID});
-       
+        if (spawnpoint == null)
+        {
+            Debug.LogError("No valid spawnpoint found!");
+            return;
+        }
+
+        // Use forward slashes for Photon resource paths
+        string playerControllerPath = "PhotonPrefabs/PlayerController";
+        
+        // Verify the prefab exists
+        if (Resources.Load(playerControllerPath) == null)
+        {
+            Debug.LogError($"PlayerController prefab not found at Resources/{playerControllerPath}");
+            return;
+        }
+
+        // Spawn the player
+        try
+        {
+            controller = PhotonNetwork.Instantiate(playerControllerPath, spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
+            Debug.Log($"Successfully spawned PlayerController at {spawnpoint.position}");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Failed to instantiate PlayerController: {e.Message}");
+        }
     }
     
     /*public override void OnPlayerEnteredRoom(Player newPlayer)
