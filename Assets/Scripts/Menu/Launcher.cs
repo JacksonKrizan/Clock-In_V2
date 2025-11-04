@@ -27,7 +27,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Instance = this;
     }
-    // Start is called before the first frame update
+    void Update()
+    {
+        Debug.Log("Map Number: " + mapNumber  );
+    }
     void Start()
     {
         Debug.Log("Connecting to Master");

@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 5f5ec71da8f67934c89cf9bf2c3bdf67
+  - enabled: 1
+    path: Assets/Scenes/Chef.unity
+    guid: c29ff453e76c8344f8b243b455f32d7a
   m_configObjects: {}
