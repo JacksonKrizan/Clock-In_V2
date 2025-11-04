@@ -22,6 +22,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public int mapNumber = 1;
     [SerializeField] TMP_InputField mapNumberInput = null;
     [SerializeField] List<GameObject> noShowForNonMasterClient;// = new List<GameObject>();
+    public List<string> mapOptions;
 
     void Awake()
     {
@@ -36,7 +37,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         Debug.Log("Connecting to Master");
         PhotonNetwork.ConnectUsingSettings();
     }
-    public void OnMapNumberInputValueChanged()
+    /*public void OnMapNumberInputValueChanged()
     {
         if (string.IsNullOrEmpty(mapNumberInput.text))
         {
@@ -45,7 +46,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             return;
         }
         mapNumberInput.text = mapNumber.ToString();
-    }
+    }*/ // used this code to debug map number input field and it used a input field
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to Master");
@@ -120,7 +121,14 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("loading");
 
     }
-
+    public void ShowMapSelection()
+    {
+        MenuManager.Instance.OpenMenu("mapSelection");
+    }
+    public void RoomMenu()
+    {
+        MenuManager.Instance.OpenMenu("room");
+    }
     public void JoinRoom(RoomInfo info)
     {
         PhotonNetwork.JoinRoom(info.Name);
