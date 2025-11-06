@@ -157,4 +157,16 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
     }
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+    public void AreYouSureExit()
+    {
+        MenuManager.Instance.OpenMenu("AreYouSureExit");
+    }
+    public void BackToMenu()
+    {
+        MenuManager.Instance.OpenMenu("title");
+    }
 }
