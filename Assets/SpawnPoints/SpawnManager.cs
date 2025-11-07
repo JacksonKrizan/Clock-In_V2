@@ -18,6 +18,15 @@ public class SpawnManager : MonoBehaviour
 
     public Transform GetSpawnpoint()
     {
+        // Check if we have any spawn points
+        if (spawnpoints == null || spawnpoints.Length == 0)
+        {
+            Debug.LogWarning("No spawn points found! Make sure you have GameObjects with Spawnpoint component as children of SpawnManager");
+            // Return the SpawnManager's transform as a fallback spawn position
+            return transform;
+        }
+
+        // Get a random spawn point
         return spawnpoints[Random.Range(0, spawnpoints.Length)].transform;
     }
 }
