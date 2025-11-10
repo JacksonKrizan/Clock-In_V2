@@ -23,20 +23,37 @@ void Awake()
         PV = GetComponent<PhotonView>();
     }
 
+    private bool cursorLocked = true;
+
     void Start()
     {
         if (!PV.IsMine)
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
+            return;
         }
+
+        // Initialize cursor state for local player
+        SetCursorState(true);
     }
+
     void Update()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        if(Input.GetKeyDown(KeyCode.Escape))
-            Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        if (!PV.IsMine)
+            return;
+
+        // Toggle cursor lock with X key
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            cursorLocked = !cursorLocked;
+            SetCursorState(cursorLocked);
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            cursorLocked = !cursorLocked;
+            SetCursorState(cursorLocked);
+        }
 
         if (!PV.IsMine)
             return;
@@ -81,5 +98,11 @@ void Awake()
             return;
 
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);//movement speed isn't from fps but form fixed delta time
+    }
+
+    private void SetCursorState(bool locked)
+    {
+        Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.visible = true; // Always keep cursor visible
     }
 }

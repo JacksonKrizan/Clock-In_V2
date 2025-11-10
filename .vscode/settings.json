@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Clock-In_V2-e5a49e6c034d6f87bb528f42ee55ddacfe3bf93b.sln"
+    "dotnet.defaultSolution": "Clock-In_V2.sln"
 }
