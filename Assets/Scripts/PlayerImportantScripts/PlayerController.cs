@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,13 +18,16 @@ public class PlayerController : MonoBehaviour
 
     PhotonView PV;
 
+
+
+
 void Awake()
     {
         rb = GetComponent<Rigidbody>();
         PV = GetComponent<PhotonView>();
     }
 
-    private bool cursorLocked = true;
+    
 
     void Start()
     {
@@ -34,8 +38,8 @@ void Awake()
             return;
         }
 
-        // Initialize cursor state for local player
-        SetCursorState(true);
+
+    
     }
 
     void Update()
@@ -43,17 +47,7 @@ void Awake()
         if (!PV.IsMine)
             return;
 
-        // Toggle cursor lock with X key
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            cursorLocked = !cursorLocked;
-            SetCursorState(cursorLocked);
-        }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            cursorLocked = !cursorLocked;
-            SetCursorState(cursorLocked);
-        }
+
 
         if (!PV.IsMine)
             return;
@@ -61,6 +55,7 @@ void Awake()
         Look();
         Move();
         Jump();
+        CursorLockState();
     }
 
 
@@ -99,10 +94,22 @@ void Awake()
 
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);//movement speed isn't from fps but form fixed delta time
     }
-
-    private void SetCursorState(bool locked)
+   void CursorLockState()
     {
-        Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
-        Cursor.visible = true; // Always keep cursor visible
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            Debug.Log("Cursor unlocked");
+        }
+        
+        {
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
     }
+
+
 }
