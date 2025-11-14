@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,10 +12,16 @@ public class MapOption3D : MonoBehaviour
     public Material selectionMaterial;
 
     private Transform selection;
-    private Material originalSelectionMaterial;
+    public Material originalSelectionMaterial;
+    public List<Material> oringinalMaterial = new List<Material>();
+    public int gameObjectTouched;
+
 
     void Update()
     {
+        
+
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         
         // Check for mouse click on a map object
@@ -27,6 +34,7 @@ public class MapOption3D : MonoBehaviour
                 {
                     if (hit.collider.gameObject == mapObjects[i])
                     {
+                        gameObjectTouched = i;
                         SelectMap(i);
                         return;
                     }
@@ -59,6 +67,7 @@ public class MapOption3D : MonoBehaviour
             var prevRenderer = selection.GetComponent<MeshRenderer>();
             if (prevRenderer && originalSelectionMaterial)
             {
+                originalSelectionMaterial = oringinalMaterial[gameObjectTouched];
                 prevRenderer.material = originalSelectionMaterial;
             }
         }
