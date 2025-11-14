@@ -29461,8 +29461,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapObjects:
-  - {fileID: 5129637608141633382}
   - {fileID: 5229226305754297642}
+  - {fileID: 5129637608141633382}
   - {fileID: 6670904187007541312}
   highlightMaterial: {fileID: 2100000, guid: 1ef96a65de0efe14ca2381f3f5c22fe4, type: 2}
   selectionMaterial: {fileID: 2100000, guid: d7ff730a36fa1594b97b7898b023c451, type: 2}
@@ -42416,7 +42416,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1305601414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73052,6 +73052,7 @@ GameObject:
   - component: {fileID: 5231065676899981794}
   - component: {fileID: 5255427056814236770}
   - component: {fileID: 5243066746840404636}
+  - component: {fileID: 5255427056814236771}
   m_Layer: 0
   m_Name: SM_Icon_Network_05
   m_TagString: Cheif
@@ -73124,6 +73125,28 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5229226305754297642}
   m_Mesh: {fileID: 4300000, guid: 49265d5d166458b4294d59d2dd984828, type: 3}
+--- !u!64 &5255427056814236771
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5229226305754297642}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 49265d5d166458b4294d59d2dd984828, type: 3}
 --- !u!1 &6670904187007541312
 GameObject:
   m_ObjectHideFlags: 0
@@ -73135,6 +73158,7 @@ GameObject:
   - component: {fileID: 6673146177901901812}
   - component: {fileID: 6692507866448015760}
   - component: {fileID: 6683479964803525454}
+  - component: {fileID: 6692507866448015761}
   m_Layer: 0
   m_Name: SM_Icon_Wrench_Hammer_01
   m_TagString: Cheif
@@ -73206,6 +73230,28 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6670904187007541312}
+  m_Mesh: {fileID: 4300000, guid: 3fe2ac941ac27e8449f0479c7c708493, type: 3}
+--- !u!64 &6692507866448015761
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6670904187007541312}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 3fe2ac941ac27e8449f0479c7c708493, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
