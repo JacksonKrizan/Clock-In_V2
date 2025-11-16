@@ -1,91 +1,64 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class MapOption3D : MonoBehaviour
 {
-    [Tooltip("List of clickable map GameObjects. Index 0 = map 1, index 1 = map 2, etc.")]
     public List<GameObject> mapObjects = new List<GameObject>();
-
-    public Material highlightMaterial;
+    public List<Material> mapObjectsOriginalMaterial = new List<Material>();
     public Material selectionMaterial;
 
-    private Transform selection;
-    public Material originalSelectionMaterial;
-    public List<Material> oringinalMaterial = new List<Material>();
-    public int gameObjectTouched;
-
+    private int selectedIndex = -1;
 
     void Update()
     {
-        
-
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        
-        // Check for mouse click on a map object
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                // Check if clicked object is in our list
+                Transform hitT = hit.collider.transform;
                 for (int i = 0; i < mapObjects.Count; i++)
                 {
-                    if (hit.collider.gameObject == mapObjects[i])
+                    var target = mapObjects[i];
+                    if (target == null) continue;
+                    if (hitT == target.transform || hitT.IsChildOf(target.transform))
                     {
-                        gameObjectTouched = i;
                         SelectMap(i);
                         return;
                     }
                 }
             }
         }
+    }
 
-        // Highlight on hover
-        if (Physics.Raycast(ray, out RaycastHit hoverHit))
+    void SelectMap(int index)
+    {
+        if (selectedIndex >= 0 && selectedIndex < mapObjects.Count)
         {
-            for (int i = 0; i < mapObjects.Count; i++)
+            var prevRenderer = mapObjects[selectedIndex].GetComponent<MeshRenderer>();
+            if (prevRenderer)
             {
-                if (hoverHit.collider.gameObject == mapObjects[i] && hoverHit.transform != selection)
+                if (selectedIndex < mapObjectsOriginalMaterial.Count && mapObjectsOriginalMaterial[selectedIndex] != null)
                 {
-                    var renderer = hoverHit.collider.GetComponent<MeshRenderer>();
-                    if (renderer && highlightMaterial)
-                    {
-                        renderer.material = highlightMaterial;
-                    }
+                    prevRenderer.material = mapObjectsOriginalMaterial[selectedIndex];
                 }
             }
         }
-    }
 
-    void SelectMap(int mapIndex)
-    {
-        // Deselect previous
-        if (selection != null)
+        selectedIndex = index;
+        var renderer = mapObjects[index].GetComponent<MeshRenderer>();
+        if (renderer && selectionMaterial)
         {
-            var prevRenderer = selection.GetComponent<MeshRenderer>();
-            if (prevRenderer && originalSelectionMaterial)
-            {
-                originalSelectionMaterial = oringinalMaterial[gameObjectTouched];
-                prevRenderer.material = originalSelectionMaterial;
-            }
+            while (mapObjectsOriginalMaterial.Count <= index)
+                mapObjectsOriginalMaterial.Add(null);
+
+            mapObjectsOriginalMaterial[index] = renderer.material;
+
+            renderer.material = selectionMaterial;
         }
 
-        // Select new
-        selection = mapObjects[mapIndex].transform;
-        var renderer = selection.GetComponent<MeshRenderer>();
-        if (renderer)
-        {
-            originalSelectionMaterial = renderer.material;
-            if (selectionMaterial)
-            {
-                renderer.material = selectionMaterial;
-            }
-        }
-
-        // Set map number (index + 1, so index 0 = map 1)
-        Launcher.Instance.mapNumber = mapIndex + 1;
-        Debug.Log($"Map {mapIndex + 1} selected");
+        Launcher.Instance.mapNumber = index + 1;
+        Debug.Log($"Map {index + 1} selected");
     }
 }
