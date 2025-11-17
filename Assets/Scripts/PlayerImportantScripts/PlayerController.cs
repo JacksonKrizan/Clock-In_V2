@@ -45,7 +45,7 @@ void Awake()
 
     void Update()
     {
-        Debug.Log(playerSettings.isSettingsMenuOpen);
+        
         if (!PV.IsMine)
             return;
 
@@ -58,6 +58,7 @@ void Awake()
         Move();
         Jump();
         CursorLockState();
+        Debug.Log(playerSettings.isSettingsMenuOpen);
     }
 
 
