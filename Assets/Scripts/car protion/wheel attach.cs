@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WheelAttach : MonoBehaviour
 {
     public GameObject WheelOnPlayer1;   // The wheel shown on the player
-    public Transform AttachPoint;       // Where the wheel should attach on the car
+    public Vector3 AttachPoint;       // Where the wheel should attach on the car
+    //[SerializeField] GameObject carTire;
     private bool wheelPickedUp = false;
+    public List<GameObject> wheels;
 
     void Start()
     {
@@ -28,10 +31,18 @@ public class WheelAttach : MonoBehaviour
             }
         }
     }
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Tirespot"))
+        {
+            AttachWheel();
+            Debug.Log("tire");
+        }
+    }
 
     void AttachWheel()
     {
-        WheelOnPlayer1.transform.SetParent(AttachPoint);
+        //WheelOnPlayer1.transform.SetParent(AttachPoint);
         WheelOnPlayer1.transform.localPosition = Vector3.zero;
         WheelOnPlayer1.transform.localRotation = Quaternion.identity;
 
@@ -42,5 +53,10 @@ public class WheelAttach : MonoBehaviour
         if (rb) rb.isKinematic = true;
 
         Debug.Log("Wheel attached!");
+    }
+
+    void AttachWheel2()
+    {
+        wheels[0].transform.position = new Vector3(0, 0, 0); 
     }
 }
