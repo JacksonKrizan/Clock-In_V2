@@ -48,16 +48,19 @@ void Awake()
         
         if (!PV.IsMine)
             return;
+            
 
 
 
-        if (!PV.IsMine)
-            return;
+        //if (!PV.IsMine)
+            //return;
+
+
 
         Look();
         Move();
         Jump();
-        CursorLockState();
+        //CursorLockState();
         Debug.Log(playerSettings.isSettingsMenuOpen);
     }
 
@@ -97,9 +100,11 @@ void Awake()
 
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);//movement speed isn't from fps but form fixed delta time
     }
-   void CursorLockState()
+   void LockCursor()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        /*if (Input.GetKey(KeyCode.Escape))
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -110,8 +115,13 @@ void Awake()
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        }
+        }*/
 
+    }
+    void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        //Cursor.visible = true;
     }
 
 
