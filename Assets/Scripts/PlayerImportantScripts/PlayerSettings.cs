@@ -4,11 +4,13 @@ using Photon.Realtime;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using UnityEditor.Build;
+using System.Security.Cryptography.X509Certificates;
 
 public class PlayerSettings : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject settingsMenu;
-    /*public bool isSettingsMenuOpen;
+    public bool isSettingsMenuOpen = false;
+    //public bool isSettingsMenuOpen;
     public override void OnLeftRoom()
     {
         PhotonNetwork.LeaveRoom();
@@ -16,11 +18,11 @@ public class PlayerSettings : MonoBehaviourPunCallbacks
     }
     public void ToggleSettingsMenu()
     {
-        settingsMenu.SetActive(true);
-        //settingsMenu.SetActive(!settingsMenu.activeSelf);
+        settingsMenu.SetActive(!settingsMenu.activeSelf);
         isSettingsMenuOpen = !isSettingsMenuOpen;
 
     }
+    /*
     public void CloseSettingsMenu()
     {
         settingsMenu.SetActive(false);
@@ -30,7 +32,7 @@ public class PlayerSettings : MonoBehaviourPunCallbacks
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            settingsMenu.SetActive(!settingsMenu.activeSelf);
+            settingsMenu.SetActive(true);
         }
     }
 

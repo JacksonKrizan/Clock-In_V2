@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
 
     PhotonView PV;
+    PlayerSettings playerSettings;
 
 
 
@@ -44,6 +45,7 @@ void Awake()
 
     void Update()
     {
+        Debug.Log(playerSettings.isSettingsMenuOpen);
         if (!PV.IsMine)
             return;
 
