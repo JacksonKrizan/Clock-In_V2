@@ -17,7 +17,10 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
 
     PhotonView PV;
-    PlayerSettings playerSettings;
+    [SerializeField] PlayerSettings playerSettings;
+
+    public bool lookAround = true;
+
 
 
 
@@ -39,26 +42,25 @@ void Awake()
             return;
         }
 
-
-    
+        if (playerSettings == null)
+        {
+            playerSettings = FindObjectOfType<PlayerSettings>();
+        }
     }
 
     void Update()
     {
+        if (!PV.IsMine)
+            return;
+        if (lookAround == true)
+        {Look();}
+        else
+        {
+        }
         
-        if (!PV.IsMine)
-            return;
-
-
-
-        if (!PV.IsMine)
-            return;
-
-        Look();
         Move();
         Jump();
         CursorLockState();
-        Debug.Log(playerSettings.isSettingsMenuOpen);
     }
 
 
@@ -70,6 +72,7 @@ void Awake()
         verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
 
         cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
+        //cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
     }
     void Move()
     {
@@ -99,19 +102,19 @@ void Awake()
     }
    void CursorLockState()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        if (playerSettings != null && playerSettings.isSettingsMenuOpen)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            Debug.Log("Cursor unlocked");
-        }
-        
-        {
+            lookAround = false;
 
+        }
+        else
+        {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            lookAround = true;
         }
-
     }
 
 

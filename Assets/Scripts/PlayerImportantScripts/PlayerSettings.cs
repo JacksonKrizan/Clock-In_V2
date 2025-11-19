@@ -10,30 +10,39 @@ public class PlayerSettings : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject settingsMenu;
     public bool isSettingsMenuOpen = false;
-    //public bool isSettingsMenuOpen;
+
     public override void OnLeftRoom()
     {
         PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene(0);
     }
-    public void ToggleSettingsMenu()
-    {
-        settingsMenu.SetActive(!settingsMenu.activeSelf);
-        isSettingsMenuOpen = !isSettingsMenuOpen;
 
-    }
-    /*
-    public void CloseSettingsMenu()
-    {
-        settingsMenu.SetActive(false);
-        isSettingsMenuOpen = false;
-    }*/
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            settingsMenu.SetActive(true);
+            OpenMenuAndUnlockCursor();
         }
+    }
+
+    public void OpenMenuAndUnlockCursor()
+    {
+        settingsMenu.SetActive(true);
+        isSettingsMenuOpen = true;
+
+        Cursor.lockState = CursorLockMode.None;
+
+        Cursor.visible = true;
+    }
+
+    public void LockCursorAndCloseMenu()
+    {
+        settingsMenu.SetActive(false);
+        isSettingsMenuOpen = false;
+        
+        Cursor.lockState = CursorLockMode.Locked;
+
+        Cursor.visible = false;
     }
 
 }
