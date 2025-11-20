@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 public class PlayerSettings : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject settingsMenu;
+    [SerializeField] GameObject howToPlayMenu;
     public bool isSettingsMenuOpen = false;
 
     public override void OnLeftRoom()
@@ -44,5 +45,10 @@ public class PlayerSettings : MonoBehaviourPunCallbacks
 
         Cursor.visible = false;
     }
+    public void OpenHowToPlayMenu()
+    {
+        howToPlayMenu.SetActive(!howToPlayMenu.activeSelf);
+    }
+    
 
 }
