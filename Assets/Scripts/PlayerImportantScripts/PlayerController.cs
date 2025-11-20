@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,13 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
 
     PhotonView PV;
+    [SerializeField] PlayerSettings playerSettings;
+
+    public bool lookAround = true;
+
+
+
+
 
 void Awake()
     {
@@ -23,7 +31,7 @@ void Awake()
         PV = GetComponent<PhotonView>();
     }
 
-    private bool cursorLocked = true;
+    
 
     void Start()
     {
@@ -34,33 +42,25 @@ void Awake()
             return;
         }
 
-        // Initialize cursor state for local player
-        SetCursorState(true);
+        if (playerSettings == null)
+        {
+            playerSettings = FindObjectOfType<PlayerSettings>();
+        }
     }
 
     void Update()
     {
         if (!PV.IsMine)
             return;
-
-        // Toggle cursor lock with X key
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (lookAround == true)
+        {Look();}
+        else
         {
-            cursorLocked = !cursorLocked;
-            SetCursorState(cursorLocked);
         }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            cursorLocked = !cursorLocked;
-            SetCursorState(cursorLocked);
-        }
-
-        if (!PV.IsMine)
-            return;
-
-        Look();
+        
         Move();
         Jump();
+        CursorLockState();
     }
 
 
@@ -72,6 +72,7 @@ void Awake()
         verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
 
         cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
+        //cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
     }
     void Move()
     {
@@ -99,10 +100,22 @@ void Awake()
 
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);//movement speed isn't from fps but form fixed delta time
     }
-
-    private void SetCursorState(bool locked)
+   void CursorLockState()
     {
-        Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
-        Cursor.visible = true; // Always keep cursor visible
+        if (playerSettings != null && playerSettings.isSettingsMenuOpen)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            lookAround = false;
+
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            lookAround = true;
+        }
     }
+
+
 }
