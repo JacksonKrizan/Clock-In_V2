@@ -10,12 +10,14 @@ public class Clickable : MonoBehaviour
 
 
     void Update()
-    { Debug.Log("1 Clickable");
+    { //Debug.Log("1 Clickable");
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {Debug.Log("2 Clickable");
+        //Debug.Log(hit.collider.tag);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {Debug.Log("3 Clickable");
+            Debug.Log(hit.collider.tag);
                 //Transform hitT = hit.collider.transform;
                 for (int i = 0; i < tagsToToggle.Count; i++)
                 {Debug.Log("4 Clickable");
