@@ -1241,7 +1241,7 @@ MonoBehaviour:
   objectsToToggle:
   - {fileID: 8051736001255816791}
   tagsToToggle:
-  - Servers
+  - Board
 --- !u!114 &837693444476099454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3547,7 +3547,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6575265898745393353
 RectTransform:
   m_ObjectHideFlags: 0
