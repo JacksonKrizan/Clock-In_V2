@@ -11,12 +11,15 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
-    /*PhotonView PV;
+    PhotonView PV;
+    //PhotonView PV;
+    GameObject controller;
+
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
     }
-    // Start is called before the first frame update
+
     void Start()
     {
         if (PV.IsMine)
@@ -24,51 +27,19 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             CreateController();
         }
     }
-    //void CreateController()
-    //{
-    //    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
-    //}
-    void CreateController()//makes the player
+
+    void CreateController()
     {
+        Debug.Log("Creating player controller for " + PV.Owner.NickName);
         Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
-    }*/
-    
-     PhotonView PV;
-
-    GameObject controller;
-
-    int kills;
-    int deaths;
-
-    private void Awake()
-    {
-        PV = GetComponent<PhotonView>();
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (PhotonNetwork.IsConnectedAndReady)
-        {
-            CreateController();
-        }
-    }
-
-    void CreateController()//makes the player
-    {
-        Debug.Log("Creating player controller");
-
-        //PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
-        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] {PV.ViewID});
-       
+        controller = PhotonNetwork.Instantiate("PhotonPrefabs/PlayerController", spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
     }
     
-    /*public override void OnPlayerEnteredRoom(Player newPlayer)
+    public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.Log("New Player Joined: " + newPlayer.NickName);
+        //Debug.Log("New Player Joined: " + newPlayer.NickName);
 
-        // If the local player is the Master Client, make sure the new player sees existing ones
+        
         if (PhotonNetwork.IsMasterClient)
         {
             foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
@@ -78,7 +49,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                 Debug.Log("Syncing player for new player");
             }
         }
-    }*/
+    }
     public static PlayerManager Find(Player player)
     {
         return FindObjectsOfType<PlayerManager>().SingleOrDefault(x => x.PV.Owner == player);

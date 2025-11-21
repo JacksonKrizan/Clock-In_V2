@@ -61,9 +61,20 @@ void Awake()
         Move();
         Jump();
         CursorLockState();
+        FallOutOfBoundsCheck();
     }
 
-
+    void FallOutOfBoundsCheck()
+    {
+        if (transform.position.y < -20f)
+        {
+            //transform.position = new Vector3(0f, 5f, 0f);
+            Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+            transform.position = spawnpoint.position;
+            
+            rb.velocity = Vector3.zero;
+        }
+    }
     void Look()
     {
         transform.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * mouseSensitivity);

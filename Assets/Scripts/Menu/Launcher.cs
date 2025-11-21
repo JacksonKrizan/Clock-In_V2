@@ -20,9 +20,11 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] GameObject PlayerListItemPrefab;
 
     public int mapNumber = 1;
-    [SerializeField] TMP_InputField mapNumberInput = null;
+    //[SerializeField] TMP_InputField mapNumberInput = null;
     [SerializeField] List<GameObject> noShowForNonMasterClient;// = new List<GameObject>();
-    public List<string> mapOptions;
+    //public List<string> mapOptions;
+    [SerializeField] List<string> mapSelected;
+    public TMP_Text mapSelectedText;
 
     void Awake()
     {
@@ -31,6 +33,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     void Update()
     {
         Debug.Log("Map Number: " + mapNumber  );
+        mapSelectedText.text = mapSelected[mapNumber -1] + " Selected Map";
     }
     void Start()
     {
