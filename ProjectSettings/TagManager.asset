@@ -8,6 +8,7 @@ TagManager:
   - Networking
   - Auto
   - Board
+  - Servers
   layers:
   - Default
   - TransparentFX
