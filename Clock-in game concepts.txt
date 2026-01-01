@@ -1,0 +1,181 @@
+Below are 3D versions of the same mini-game concepts. Each one keeps the learning objectives but turns the experience into a physical 3D job task, similar to VR job sims or Overcooked-style station gameplay. Everything is still small, fast, and simple to implement in Unity.
+
+1. TCP/IP Fundamentals – 3D Mini-Games
+A. IP Address Assembly (3D Console Room)
+
+Scene: A small server room with floating holographic IP blocks.
+Gameplay:
+
+A hologram displays an incomplete IP (e.g., “192.168.___.45”).
+
+You walk to racks containing numbered cubes (0-255).
+
+Pick the correct block and insert it into a glowing IP slot.
+
+Time pressure: conveyor belt of “packets” heading toward a firewall gate.
+
+B. TCP vs. UDP Delivery Docks
+
+Scene: Warehouse with two loading docks: TCP Truck and UDP Truck.
+Gameplay:
+
+“Packets” are boxes rolling on a belt with labels like “Bank Login,” “Video Stream,” etc.
+
+You physically grab the box and toss it into the TCP or UDP truck.
+
+Hard mode: boxes come in varied sizes, belt moves faster, fog obscures labels.
+
+C. Port Counter Rush (3D Food Court Style)
+
+Scene: A futuristic data-food court with counters labeled 80, 443, 53, 21, etc.
+Gameplay:
+
+Packets appear as small bots that speak their protocol: “I need HTTPS!”
+
+You pick them up or push them on rails to the correct port counter.
+
+Later: counters move locations, some are temporarily blocked.
+
+2. Networking Hardware & Topologies – 3D Mini-Games
+A. Topology Builder (3D Tabletop Sandbox)
+
+Scene: Large table with node pieces (computers, switches, routers).
+Gameplay:
+
+You drag and place 3D devices, connect them with cables that snap into ports.
+
+You must build the requested topology (e.g., star, mesh, VLAN zones).
+
+Once complete, a “test packet” travels through the network to validate it.
+
+B. Hardware Repair Shop (3D Workbench)
+
+Scene: A tech repair desk with shelves and toolkits.
+Gameplay:
+
+NPCs hand you broken devices: routers, switches, APs, and firewalls.
+
+You identify the device by physical traits (antennas, port types, firewall shield icon).
+
+Place them on the correct repair station.
+
+Optional: quick 3D minigame to “replace modules,” “plug in cables,” etc.
+
+C. Cable Matcher (3D Cable Wall)
+
+Scene: A wall of cables: fiber spools, Ethernet racks, coax reels.
+Gameplay:
+
+Requests pop up: “Connect server to backbone,” “Short LAN link.”
+
+You grab the right cable type physically and plug it into a client device.
+
+Hard mode: cable lengths matter and walls have mixed shelves.
+
+3. Routing & Switching – 3D Mini-Games
+A. Router Path Puzzle (3D Routing Floor)
+
+Scene: Large floor grid with glowing lines.
+Gameplay:
+
+A packet robot spawns with a destination IP.
+
+You alter physical routing tiles on the floor (each tile represents a route prefix).
+
+The robot will follow the highest-priority tile you arrange.
+
+Difficulty: overlapping prefixes require careful placement.
+
+B. VLAN Color Sort (3D Cable Patch Panel)
+
+Scene: A tall server rack with color-coded VLAN ports.
+Gameplay:
+
+Devices come on a conveyor (color-coded or label-coded).
+
+You grab a patch cable and plug it into the correct VLAN port.
+
+New levels add trunk ports (multi-color) and tagging rules.
+
+C. MAC Table Memory Lab (3D Port Board)
+
+Scene: A giant board with ports numbered 1–12.
+Gameplay:
+
+MAC addresses flash quickly above ports.
+
+Then a frame robot appears saying “Send me to MAC: AA:BB:CC:DD.”
+
+You run and hit the correct port button.
+
+Difficulty: MAC table flashes shorter, more MACs appear.
+
+4. Network Security – 3D Mini-Games
+A. Firewall Gatekeeper (3D Security Checkpoint)
+
+Scene: Looks like an airport TSA line but for network packets.
+Gameplay:
+
+Packets walk up as characters with floating tags (source IP, port, protocol).
+
+A rule board hovers above you.
+
+You press ALLOW or DENY gates physically to direct them.
+
+Hard mode: rules overlap and move in priority order.
+
+B. VPN Tunnel Builder (3D Vault Room)
+
+Scene: Two server vaults separated by a large empty space.
+Gameplay:
+
+You choose virtual “tunnel segments” (encryption keys, protocols, hash types).
+
+Physically snap tunnel pieces together to make a glowing secure tunnel.
+
+Wrong key = tunnel collapses visually.
+
+C. Intrusion Spotter (3D Command Center)
+
+Scene: Large wall of holographic logs scrolling fast.
+Gameplay:
+
+You physically tap suspicious entries (red fail icons, repetitive patterns).
+
+Gear handles let you slow down logs or filter by protocol.
+
+Hard mode: false positives increase.
+
+5. Troubleshooting & Monitoring – 3D Mini-Games
+A. Ping Technician (3D Terminal Pods)
+
+Scene: Multiple pods with malfunctioning devices.
+Gameplay:
+
+You walk to a pod and press large 3D “PING,” “TRACE,” and “CONFIG” buttons.
+
+A hologram shows results: unreachable host, DNS failure, long latency.
+
+You choose the correct fix by interacting with physical parts (plug cable, reboot device).
+
+B. Packet Trace Finder (3D Wireshark Arena)
+
+Scene: Giant room with floating packet cubes.
+Gameplay:
+
+Each cube displays protocol, port, flags.
+
+You locate the correct cube (e.g., SYN packet on port 80) and tag it.
+
+Timer speeds up, more cubes spawn.
+
+C. Dashboard Manager (3D Control Room)
+
+Scene: Room full of big knobs, sliders, and gauges.
+Gameplay:
+
+Network metrics rise and fall in real time.
+
+You adjust bandwidth sliders or reroute traffic by flipping switch levers.
+
+Random events cause spikes you must respond to quickly.
