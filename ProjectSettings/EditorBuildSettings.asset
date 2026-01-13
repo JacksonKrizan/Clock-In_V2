@@ -6,15 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Menu.unity
+    path: Assets/_Scenes/Menu.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/Network Engineer.unity
+    path: Assets/_Scenes/Network Engineer.unity
     guid: 53b095f194bc5c94fa1c6f8f6bff0e7f
   - enabled: 1
-    path: Assets/Scenes/Chef.unity
+    path: Assets/_Scenes/Chef.unity
     guid: c29ff453e76c8344f8b243b455f32d7a
   - enabled: 1
-    path: Assets/Scenes/AutoShop.unity
+    path: Assets/_Scenes/AutoShop.unity
     guid: 7008481848df7f64c940e60d30ca9a44
   m_configObjects: {}
