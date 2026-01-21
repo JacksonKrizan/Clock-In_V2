@@ -10,6 +10,9 @@ TagManager:
   - Board
   - Servers
   - Ethical Hacker
+  - tire pos
+  - wheel
+  - canPickUp
   layers:
   - Default
   - TransparentFX
