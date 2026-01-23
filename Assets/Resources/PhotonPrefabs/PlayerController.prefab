@@ -1657,7 +1657,7 @@ Transform:
   - {fileID: 8369395338384837009}
   - {fileID: 6167102670005536202}
   m_Father: {fileID: 0}
-  m_RootOrder: -2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7437753125228567022
 MeshFilter:
@@ -1791,7 +1791,7 @@ MonoBehaviour:
   mouseSensitivity: 3
   sprintSpeed: 12
   walkSpeed: 9
-  jumpForce: 5
+  jumpForce: 15
   smoothTime: 0.15
   playerSettings: {fileID: 0}
   lookAround: 1
