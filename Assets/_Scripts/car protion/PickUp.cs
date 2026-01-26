@@ -6,39 +6,39 @@ public class PickUp : MonoBehaviour
 {
     public GameObject player;
     public Transform holdPos;
-    //if you copy from below this point, you are legally required to like the video
-    public float throwForce = 500f; //force at which the object is thrown at
-    public float pickUpRange = 5f; //how far the player can pickup the object from
-    private float rotationSensitivity = 1f; //how fast/slow the object is rotated in relation to mouse movement
-    private GameObject heldObj; //object which we pick up
-    private Rigidbody heldObjRb; //rigidbody of object we pick up
-    private bool canDrop = true; //this is needed so we don't throw/drop object when rotating the object
-    private int LayerNumber; //layer index
+    public float throwForce = 500f;
+    public float pickUpRange = 5f;
+    private float rotationSensitivity = 1f; 
+    private GameObject heldObj;
+    private Rigidbody heldObjRb;
+    private bool canDrop = true; 
+    private int LayerNumber;
 
-    //Reference to script which includes mouse movement of player (looking around)
-    //we want to disable the player looking around when rotating the object
-    //example below 
-    //MouseLookScript mouseLookScript;
+    //[SerializeField] List<string> carParts = new List<string>();
+
+    public List<KeyValuePair<string, string>> carParts = new List<KeyValuePair<string, string>>();
+    List<KeyValuePair<string, int>> playerScores = new List<KeyValuePair<string, int>>();
+
+    //[SerializeField] List
+
     void Start()
     {
-        LayerNumber = LayerMask.NameToLayer("holdLayer"); //if your holdLayer is named differently make sure to change this ""
+        LayerNumber = LayerMask.NameToLayer("holdLayer");
 
-        //mouseLookScript = player.GetComponent<MouseLookScript>();
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E)) //change E to whichever key you want to press to pick up
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            if (heldObj == null) //if currently not holding anything
+            if (heldObj == null)
             {
-                //perform raycast to check if player is looking at object within pickuprange
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickUpRange))
                 {
-                    //make sure pickup tag is attached
+               
                     if (hit.transform.gameObject.tag == "canPickUp")
                     {
-                        //pass in object hit into the PickUpObject function
+                        
                         PickUpObject(hit.transform.gameObject);
                     }
                 }
@@ -47,16 +47,16 @@ public class PickUp : MonoBehaviour
             {
                 if(canDrop == true)
                 {
-                    StopClipping(); //prevents object from clipping through walls
+                    StopClipping();
                     DropObject();
                 }
             }
         }
-        if (heldObj != null) //if player is holding object
+        if (heldObj != null) 
         {
-            MoveObject(); //keep object position at holdPos
+            MoveObject();
             RotateObject();
-            if (Input.GetKeyDown(KeyCode.Mouse0) && canDrop == true) //Mous0 (leftclick) is used to throw, change this if you want another button to be used)
+            if (Input.GetKeyDown(KeyCode.Mouse0) && canDrop == true)
             {
                 StopClipping();
                 ThrowObject();
@@ -66,14 +66,13 @@ public class PickUp : MonoBehaviour
     }
     void PickUpObject(GameObject pickUpObj)
     {
-        if (pickUpObj.GetComponent<Rigidbody>()) //make sure the object has a RigidBody
+        if (pickUpObj.GetComponent<Rigidbody>())
         {
-            heldObj = pickUpObj; //assign heldObj to the object that was hit by the raycast (no longer == null)
-            heldObjRb = pickUpObj.GetComponent<Rigidbody>(); //assign Rigidbody
+            heldObj = pickUpObj;
+            heldObjRb = pickUpObj.GetComponent<Rigidbody>();
             heldObjRb.isKinematic = true;
-            heldObjRb.transform.parent = holdPos.transform; //parent object to holdposition
-            heldObj.layer = LayerNumber; //change the object layer to the holdLayer
-            //make sure object doesnt collide with player, it can cause weird bugs
+            heldObjRb.transform.parent = holdPos.transform; 
+            heldObj.layer = LayerNumber;
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), true);
         }
     }
