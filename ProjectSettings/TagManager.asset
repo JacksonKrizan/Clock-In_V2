@@ -13,6 +13,7 @@ TagManager:
   - tire pos
   - wheel
   - canPickUp
+  - box
   layers:
   - Default
   - TransparentFX

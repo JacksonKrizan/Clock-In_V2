@@ -13,13 +13,14 @@ public class PickUp : MonoBehaviour
     private Rigidbody heldObjRb;
     private bool canDrop = true; 
     private int LayerNumber;
+    //public 
 
     //[SerializeField] List<string> carParts = new List<string>();
 
-    public List<KeyValuePair<string, string>> carParts = new List<KeyValuePair<string, string>>();
-    List<KeyValuePair<string, int>> playerScores = new List<KeyValuePair<string, int>>();
+    //public List<KeyValuePair<string, string>> carParts = new List<KeyValuePair<string, string>>();
+    //List<KeyValuePair<string, int>> playerScores = new List<KeyValuePair<string, int>>();
 
-    //[SerializeField] List
+    [SerializeField] List<string> carParts = new List<string>();
 
     void Start()
     {
@@ -35,11 +36,13 @@ public class PickUp : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickUpRange))
                 {
-               
-                    if (hit.transform.gameObject.tag == "canPickUp")
+                    for (int i = 0; i < carParts.Count; i++)
                     {
-                        
-                        PickUpObject(hit.transform.gameObject);
+                        if (hit.transform.gameObject.tag == carParts[i])
+                        {
+
+                            PickUpObject(hit.transform.gameObject);
+                        }
                     }
                 }
             }
@@ -64,6 +67,7 @@ public class PickUp : MonoBehaviour
 
         }
     }
+
     void PickUpObject(GameObject pickUpObj)
     {
         if (pickUpObj.GetComponent<Rigidbody>())
@@ -132,6 +136,8 @@ public class PickUp : MonoBehaviour
         }
     }
 }
+
+
 
 /*
 using System.Collections;
