@@ -1778,7 +1778,7 @@ MonoBehaviour:
   mouseSensitivity: 3
   sprintSpeed: 12
   walkSpeed: 9
-  jumpForce: 15.67
+  jumpForce: 15
   smoothTime: 0.15
   playerSettings: {fileID: 0}
   lookAround: 1
