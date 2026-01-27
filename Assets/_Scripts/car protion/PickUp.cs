@@ -22,6 +22,7 @@ public class PickUp : MonoBehaviour
     //List<KeyValuePair<string, int>> playerScores = new List<KeyValuePair<string, int>>();
 
     [SerializeField] List<string> carParts = new List<string>();
+    private TestVarList GetVarList;
 
     public GameObject GetHeldObject()
     {
@@ -43,9 +44,9 @@ public class PickUp : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickUpRange))
                 {
-                    for (int i = 0; i < carParts.Count; i++)
+                    for (int i = 0; i < GetVarList.partList.Count; i++)
                     {
-                        if (hit.transform.gameObject.tag == carParts[i])
+                        if (hit.transform.gameObject == GetVarList.partList[i])
                         {
                             
                             PickUpObject(hit.transform.gameObject);
