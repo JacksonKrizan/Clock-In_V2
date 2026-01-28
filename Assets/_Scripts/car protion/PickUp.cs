@@ -13,7 +13,8 @@ public class PickUp : MonoBehaviour
     private Rigidbody heldObjRb;
     private bool canDrop = true; 
     private int LayerNumber;
-    //public 
+    //public
+    public TestVarList varList;
 
     //[SerializeField] List<string> carParts = new List<string>();
 
@@ -68,6 +69,16 @@ public class PickUp : MonoBehaviour
 
         }
     }
+    //void PlacePart(GameObject heldObj)
+    //{
+        void OnTriggerEnter(Collider socket)
+        {
+            if (socket.gameObject.tag == playerController.gameObject)
+                return;
+
+            playerController.SetGroundedState(true);
+        }
+    //}
 
     void PickUpObject(GameObject pickUpObj)
     {
