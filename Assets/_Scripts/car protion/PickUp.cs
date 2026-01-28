@@ -13,8 +13,8 @@ public class PickUp : MonoBehaviour
     private Rigidbody heldObjRb;
     private bool canDrop = true; 
     private int LayerNumber;
-    ItemPlace itemPlace;
-    //public 
+    //public
+    public TestVarList varList;
 
     //[SerializeField] List<string> carParts = new List<string>();
 
@@ -23,11 +23,6 @@ public class PickUp : MonoBehaviour
 
     [SerializeField] List<string> carParts = new List<string>();
     private TestVarList GetVarList;
-
-    public GameObject GetHeldObject()
-    {
-        return heldObj;
-    }
 
     void Start()
     {
@@ -40,7 +35,6 @@ public class PickUp : MonoBehaviour
         {
             if (heldObj == null)
             {
-                
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickUpRange))
                 {
@@ -48,7 +42,7 @@ public class PickUp : MonoBehaviour
                     {
                         if (hit.transform.gameObject == GetVarList.partList[i])
                         {
-                            
+
                             PickUpObject(hit.transform.gameObject);
                         }
                     }
@@ -72,19 +66,24 @@ public class PickUp : MonoBehaviour
                 StopClipping();
                 ThrowObject();
             }
-            if (Input.GetKeyDown(KeyCode.F) && canDrop == true)
-            {
-                StopClipping();
-                DropObject();
-            }
+
         }
     }
+    //void PlacePart(GameObject heldObj)
+    //{
+        void OnTriggerEnter(Collider socket)
+        {
+            if (socket.gameObject.tag == playerController.gameObject)
+                return;
+
+            playerController.SetGroundedState(true);
+        }
+    //}
 
     void PickUpObject(GameObject pickUpObj)
     {
         if (pickUpObj.GetComponent<Rigidbody>())
         {
-            //itemPlace.place = false;
             heldObj = pickUpObj;
             heldObjRb = pickUpObj.GetComponent<Rigidbody>();
             heldObjRb.isKinematic = true;
@@ -93,7 +92,7 @@ public class PickUp : MonoBehaviour
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), true);
         }
     }
-    public void DropObject()
+    void DropObject()
     {
         Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
         heldObj.layer = 0;

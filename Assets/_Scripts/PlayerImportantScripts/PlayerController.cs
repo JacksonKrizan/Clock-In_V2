@@ -50,6 +50,7 @@ void Awake()
 
     void Update()
     {
+
         if (!PV.IsMine)
             return;
         if (lookAround == true)
