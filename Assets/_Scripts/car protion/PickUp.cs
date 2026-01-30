@@ -64,7 +64,11 @@ public class PickUp : MonoBehaviour
                 StopClipping();
                 ThrowObject();
             }
-
+            if (Input.GetKeyDown(KeyCode.F) && canDrop == true)
+            {
+                StopClipping();
+                DropObject();
+            }
         }
     }
 
@@ -80,7 +84,7 @@ public class PickUp : MonoBehaviour
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), true);
         }
     }
-    void DropObject()
+    public void DropObject()
     {
         Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
         heldObj.layer = 0;
