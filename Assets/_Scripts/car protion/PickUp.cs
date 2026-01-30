@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PickUp : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class PickUp : MonoBehaviour
     [SerializeField] List<string> carParts = new List<string>();
     private TestVarList GetVarList;
 
+    public UnityEvent<Collision> onHit;
+
     void Start()
     {
         LayerNumber = LayerMask.NameToLayer("holdLayer");
@@ -38,9 +41,9 @@ public class PickUp : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickUpRange))
                 {
-                    for (int i = 0; i < GetVarList.partList.Count; i++)
+                    for (int i = 0; i < carParts.Count; i++)
                     {
-                        if (hit.transform.gameObject == GetVarList.partList[i])
+                        if (hit.transform.gameObject.tag == carParts[i])
                         {
 
                             PickUpObject(hit.transform.gameObject);
@@ -68,17 +71,44 @@ public class PickUp : MonoBehaviour
             }
 
         }
+        /*void OnCollisionEnter(Collision collision)
+        {
+            //collision.gameObject.tag == heldObj;
+            //colli
+
+            if (collision.gameObject.CompareTag("canDropOff"))
+            {
+
+                Debug.Log("I hit an enemy!");
+
+            }
+        }*/
+        
+
+    void OnCollisionEnter(Collision collision)
+    {
+        // When this object hits something, shout it out!
+        if (onHit != null)
+        {
+            onHit.Invoke(collision);
+        }
+    }
+    Debug.Log(heldObj + heldObj.tag);
+        
     }
     //void PlacePart(GameObject heldObj)
     //{
-        void OnTriggerEnter(Collider socket)
-        {
-            if (socket.gameObject.tag == playerController.gameObject)
-                return;
+        //void OnTriggerEnter(Collider socket)
+        //{
+        //    if (socket.gameObject.tag == playerController.gameObject)
+        //        return;
 
-            playerController.SetGroundedState(true);
-        }
+        //    playerController.SetGroundedState(true);
+        //}
     //}
+    //void PlacePart(GameObject socket)
+    //{
+
 
     void PickUpObject(GameObject pickUpObj)
     {
