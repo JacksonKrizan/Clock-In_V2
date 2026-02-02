@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.2033114, g: 0.4170547, b: 0.5721846, a: 1}
+  m_IndirectSpecularColor: {r: 0.20325328, g: 0.4170429, b: 0.57216924, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -692,7 +692,7 @@ GameObject:
   m_Component:
   - component: {fileID: 637723325}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: frontRightTire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2330,6 +2330,9 @@ MonoBehaviour:
   targetEmpty: {fileID: 637723325}
   interactRange: 1000
   delayTime: 0
+  place: 0
+  moveSpeed: 5
+  rotateSpeed: 5
 --- !u!1 &1938625938
 GameObject:
   m_ObjectHideFlags: 0

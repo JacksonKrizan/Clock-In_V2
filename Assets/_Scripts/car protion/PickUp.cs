@@ -13,6 +13,7 @@ public class PickUp : MonoBehaviour
     private Rigidbody heldObjRb;
     private bool canDrop = true; 
     private int LayerNumber;
+    ItemPlace itemPlace;
     //public 
 
     //[SerializeField] List<string> carParts = new List<string>();
@@ -33,6 +34,7 @@ public class PickUp : MonoBehaviour
         {
             if (heldObj == null)
             {
+                
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickUpRange))
                 {
@@ -40,7 +42,7 @@ public class PickUp : MonoBehaviour
                     {
                         if (hit.transform.gameObject.tag == carParts[i])
                         {
-
+                            
                             PickUpObject(hit.transform.gameObject);
                         }
                     }
@@ -76,6 +78,7 @@ public class PickUp : MonoBehaviour
     {
         if (pickUpObj.GetComponent<Rigidbody>())
         {
+            itemPlace.place = false;
             heldObj = pickUpObj;
             heldObjRb = pickUpObj.GetComponent<Rigidbody>();
             heldObjRb.isKinematic = true;
