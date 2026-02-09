@@ -33,11 +33,11 @@ public class ItemPlace : MonoBehaviour
         }
         if (place == true)
         {
-            //transform.position = targetEmpty.position;
-            //transform.rotation = targetEmpty.rotation;
-            transform.position = Vector3.Lerp(transform.position,targetEmpty.position, moveSpeed * Time.deltaTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation,targetEmpty.rotation,rotateSpeed * Time.deltaTime);
-            //place = false;
+            transform.position = targetEmpty.position;
+            transform.rotation = targetEmpty.rotation;
+            //transform.position = Vector3.Lerp(transform.position,targetEmpty.position, moveSpeed * Time.deltaTime);
+            //transform.rotation = Quaternion.Lerp(transform.rotation,targetEmpty.rotation,rotateSpeed * Time.deltaTime);
+            place = false;
         }
     }
     IEnumerator PlaceObject(float delayTime)

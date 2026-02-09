@@ -78,7 +78,7 @@ public class PickUp : MonoBehaviour
     {
         if (pickUpObj.GetComponent<Rigidbody>())
         {
-            itemPlace.place = false;
+            //itemPlace.place = false;
             heldObj = pickUpObj;
             heldObjRb = pickUpObj.GetComponent<Rigidbody>();
             heldObjRb.isKinematic = true;
