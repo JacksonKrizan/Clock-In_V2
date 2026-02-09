@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 49356824}
   - component: {fileID: 49356826}
   - component: {fileID: 49356825}
+  - component: {fileID: 49356827}
   m_Layer: 8
   m_Name: Wheel (8)
   m_TagString: canPickUp
@@ -150,7 +151,7 @@ Transform:
   m_GameObject: {fileID: 49356823}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 1.462, y: -0.000000014901161, z: 0.019}
+  m_LocalPosition: {x: 2.73, y: -0.000000014901161, z: 0.019}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -207,6 +208,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &49356827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49356823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e43c8db7748d04e0ebfc3d1f6fed5ed5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetEmpty: {fileID: 1012420934}
+  interactRange: 3
+  delayTime: 0
+  place: 0
+  moveSpeed: 5
+  rotateSpeed: 5
 --- !u!1 &223780166
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,6 +593,7 @@ GameObject:
   - component: {fileID: 515415694}
   - component: {fileID: 515415696}
   - component: {fileID: 515415695}
+  - component: {fileID: 515415697}
   m_Layer: 8
   m_Name: Wheel (6)
   m_TagString: canPickUp
@@ -590,7 +610,7 @@ Transform:
   m_GameObject: {fileID: 515415693}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 1.479, y: -0.000000014901161, z: -2.598}
+  m_LocalPosition: {x: 2.355, y: -0.000000014901161, z: -2.598}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -647,6 +667,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &515415697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515415693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e43c8db7748d04e0ebfc3d1f6fed5ed5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetEmpty: {fileID: 694835182}
+  interactRange: 3
+  delayTime: 0
+  place: 0
+  moveSpeed: 5
+  rotateSpeed: 5
 --- !u!1 &537596859
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,13 +858,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 694835181}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5424271, y: 4.36417, z: 5.5788116}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -1.686, y: 4.36417, z: 5.5788116}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 537596860}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &699425736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1044,13 +1082,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1012420933}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5424271, y: 4.36417, z: 9.486809}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -1.644, y: 4.36417, z: 9.486809}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 537596860}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &1175020067
 GameObject:
   m_ObjectHideFlags: 0
@@ -1360,6 +1398,7 @@ GameObject:
   - component: {fileID: 1417037539}
   - component: {fileID: 1417037541}
   - component: {fileID: 1417037540}
+  - component: {fileID: 1417037542}
   m_Layer: 8
   m_Name: Wheel (7)
   m_TagString: canPickUp
@@ -1376,7 +1415,7 @@ Transform:
   m_GameObject: {fileID: 1417037538}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.021, y: 0, z: -2.594}
+  m_LocalPosition: {x: -0.918, y: 0, z: -2.594}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1433,6 +1472,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1417037542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1417037538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e43c8db7748d04e0ebfc3d1f6fed5ed5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetEmpty: {fileID: 930234726}
+  interactRange: 3
+  delayTime: 0
+  place: 0
+  moveSpeed: 5
+  rotateSpeed: 5
 --- !u!1 &1424587993
 GameObject:
   m_ObjectHideFlags: 0

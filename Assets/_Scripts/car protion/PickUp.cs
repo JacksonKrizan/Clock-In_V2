@@ -23,6 +23,11 @@ public class PickUp : MonoBehaviour
 
     [SerializeField] List<string> carParts = new List<string>();
 
+    //public GameObject GetHeldObject()
+    //{
+    //    return heldObj;
+    //}
+
     void Start()
     {
         LayerNumber = LayerMask.NameToLayer("holdLayer");
