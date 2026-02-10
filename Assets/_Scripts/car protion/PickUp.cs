@@ -23,10 +23,10 @@ public class PickUp : MonoBehaviour
 
     [SerializeField] List<string> carParts = new List<string>();
 
-    //public GameObject GetHeldObject()
-    //{
-    //    return heldObj;
-    //}
+    public GameObject GetHeldObject()
+    {
+        return heldObj;
+    }
 
     void Start()
     {
