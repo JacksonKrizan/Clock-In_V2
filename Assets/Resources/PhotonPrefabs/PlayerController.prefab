@@ -1602,11 +1602,15 @@ MonoBehaviour:
   holdPos: {fileID: 3512317526049549176}
   throwForce: 500
   pickUpRange: 5
+  varList: {fileID: 0}
   carParts:
   - tire
   - car
   - box
   - canPickUp
+  onHit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3968666675570788233
 GameObject:
   m_ObjectHideFlags: 0
