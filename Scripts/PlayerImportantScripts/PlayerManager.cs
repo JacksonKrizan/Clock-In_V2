@@ -5,81 +5,80 @@ using Photon.Pun;
 using System.IO;
 using System.Linq;
 using Photon.Realtime;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
-
-
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
-    /*PhotonView PV;
+    PhotonView PV;
+    GameObject controller;
+
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
     }
-    // Start is called before the first frame update
-    void Start()
+
+    public override void OnEnable()
     {
+        base.OnEnable();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Don't spawn if we are in the Menu or if it's not our PlayerManager
+        if (scene.name == "_Menu" || scene.name == "Menu") return;
+
         if (PV.IsMine)
         {
             CreateController();
         }
     }
-    //void CreateController()
-    //{
-    //    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
-    //}
-    void CreateController()//makes the player
-    {
-        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
-    }*/
-    
-     PhotonView PV;
 
-    GameObject controller;
-
-    int kills;
-    int deaths;
-
-    private void Awake()
+    void CreateController()
     {
-        PV = GetComponent<PhotonView>();
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (PhotonNetwork.IsConnectedAndReady)
+        string sceneName = SceneManager.GetActiveScene().name;
+        string prefabName = "PlayerController"; // Default fallback
+
+        // Select the specific prefab for this map
+        if (sceneName == "AutoShop")
         {
-            CreateController();
+            prefabName = "AutoShopPlayer";
         }
-    }
-
-    void CreateController()//makes the player
-    {
-        Debug.Log("Creating player controller");
-        
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
-       
-    }
-    
-    /*public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        Debug.Log("New Player Joined: " + newPlayer.NickName);
-
-        // If the local player is the Master Client, make sure the new player sees existing ones
-        if (PhotonNetwork.IsMasterClient)
+        else if (sceneName == "Chef")
         {
-            foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+            prefabName = "ChefPlayer";
+        }
+        else if (sceneName == "Network Engineer")
+        {
+            prefabName = "NetworkEngineerPlayer";
+        }
+
+        Debug.Log("Spawning " + prefabName + " for map: " + sceneName);
+
+        Vector3 spawnPos = Vector3.zero;
+        Quaternion spawnRot = Quaternion.identity;
+
+        if (SpawnManager.Instance != null)
+        {
+            Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+            if (spawnpoint != null)
             {
-                PhotonView pv = player.GetComponent<PhotonView>();
-                pv.RPC("SyncExistingPlayer", newPlayer);
-                Debug.Log("Syncing player for new player");
+                spawnPos = spawnpoint.position;
+                spawnRot = spawnpoint.rotation;
             }
         }
-    }*/
+
+        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", prefabName), spawnPos, spawnRot, 0, new object[] { PV.ViewID });
+    }
+
     public static PlayerManager Find(Player player)
     {
         return FindObjectsOfType<PlayerManager>().SingleOrDefault(x => x.PV.Owner == player);
     }
-
 }

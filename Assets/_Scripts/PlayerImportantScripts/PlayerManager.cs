@@ -6,15 +6,17 @@ using System.IO;
 using System.Linq;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using System.Numerics;
 
 
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
     PhotonView PV;
-    //PhotonView PV;
     GameObject controller;
 
+    Launcher launcher;
+    string prefabPath = "PhotonPrefabs/PlayerController"; 
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
@@ -30,10 +32,99 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     void CreateController()
     {
+        GetPlayerController();
+        /*if (launcher.mapNumber == 0)
+        {
+            //Debug.Log("Map number is 0, using GameDev prefab");
+            prefabPath = "PhotonPrefabs/GamingPlayerController";
+        }
+        else
+        {
+            prefabPath = "PhotonPrefabs/PlayerController";
+        }*/
         Debug.Log("Creating player controller for " + PV.Owner.NickName);
         Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        controller = PhotonNetwork.Instantiate("PhotonPrefabs/PlayerController", spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
+        controller = PhotonNetwork.Instantiate(prefabPath, spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
     }
+    void GetPlayerController()
+    {
+        if (launcher.mapNumber == 0)
+        {
+            //Debug.Log("Map number is 0, using GameDev prefab");
+            prefabPath = "PhotonPrefabs/GamingPlayerController";
+        }
+        else if (launcher.mapNumber == 1)
+        {
+            prefabPath = "PhotonPrefabs/AutoPlayerController";
+        }
+        else if (launcher.mapNumber == 2)
+        {
+            prefabPath = "PhotonPrefabs/FirePlayerController";
+        }
+        else
+        {
+            prefabPath = "PhotonPrefabs/PlayerController";
+        }
+        
+    }
+    /*void CreateController()
+    {
+        //string prefabPath = "PhotonPrefabs/GamingPlayerController"; // Default path
+        string prefabPath = "PhotonPrefabs/PlayerController"; // Default path
+        
+        Debug.Log("Creating player controller for " + PV.Owner.NickName);
+        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+        if (launcher.mapNumber == 0)
+        {
+            //Debug.Log("Map number is 0, using GameDev prefab");
+            prefabPath = "PhotonPrefabs/GamingPlayerController";
+        }
+        else if (launcher.mapNumber == 1)
+        {
+            prefabPath = "PhotonPrefabs/AutoPlayerController";
+        }
+        else if (launcher.mapNumber == 2)
+        {
+            prefabPath = "PhotonPrefabs/FirePlayerController";
+        }
+
+        controller = PhotonNetwork.Instantiate(prefabPath, spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
+    }*/
+
+    /*void CreateController()
+    {
+        string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        string prefabPath = "PhotonPrefabs/PlayerController"; // Default path
+
+        //if (sceneName == "GameDev")
+        if (launcher.mapNumber == 0)
+        {
+            Debug.Log("Map number is 0, using GameDev prefab");
+            prefabPath = "PhotonPrefabs/GamingPlayerController";
+        }
+        else if (sceneName == "WarehouseScene")
+        {
+            prefabPath = "PhotonPrefabs/WarehousePlayerController";
+        }
+        else if (sceneName == "FactoryScene")
+        {
+            prefabPath = "PhotonPrefabs/FactoryPlayerController";
+        }
+        Debug.Log("Creating player controller for " + PV.Owner.NickName + " using prefab: " + prefabPath);
+
+
+
+        if (SpawnManager.Instance != null)
+        {
+            Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+            controller = PhotonNetwork.Instantiate(prefabPath, spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
+        }
+        else
+        {
+            Debug.LogWarning("SpawnManager instance not found! Spawning at default position.");
+        }
+        
+    }*/
     
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
