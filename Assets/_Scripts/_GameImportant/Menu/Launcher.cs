@@ -37,6 +37,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             int index = Mathf.Clamp(mapNumber - 1, 0, mapSelected.Count - 1);
             mapSelectedText.text = mapSelected[index] + " Selected Map" + mapNumber;
         }
+        Debug.Log(mapNumber + "Map Number Selected.");
     }
     void Start()
     {
