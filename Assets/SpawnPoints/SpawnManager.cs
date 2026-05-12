@@ -7,7 +7,7 @@ public class SpawnManager : MonoBehaviour
 {
     public static SpawnManager Instance;
 
-    Spawnpoint[] spawnpoints;
+    public Spawnpoint[] spawnpoints;
 
     private void Awake()
     {
