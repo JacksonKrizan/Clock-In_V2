@@ -70,8 +70,20 @@ void Awake()
         Jump();
         CursorLockState();
         FallOutOfBoundsCheck();
+        Menu();
     }
 
+    void Menu()
+    {
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            if (playerSettings != null)
+            {
+                lookAround = false;
+                playerSettings.OpenMenuAndUnlockCursor();
+            }
+        }
+    }
     void FallOutOfBoundsCheck()
     {
         if (transform.position.y < -20f)

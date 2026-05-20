@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock-In | Job Simulation Experience</title>
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --secondary: #0056b3;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1e1b4b 100%);
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-dim);
+            max-width: 600px;
+        }
+
+        .cta-button {
+            margin-top: 30px;
+            padding: 12px 30px;
+            background-color: var(--primary);
+            color: var(--bg-dark);
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            background-color: #fff;
+        }
+
+        section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--primary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .controls {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .key-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .key {
+            background: #334155;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            border: 1px solid var(--primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid #334155;
+            color: var(--text-dim);
+        }
+
+        .multiplayer-badge {
+            display: inline-block;
+            background-color: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="multiplayer-badge">Powered by Photon PUN 2</div>
+        <h1>CLOCK-IN</h1>
+        <p class="subtitle">Experience the ultimate career simulation in a vibrant, multiplayer open world. Discover your future, one task at a time.</p>
+        <a href="#about" class="cta-button">Explore Careers</a>
+    </header>
+
+    <section id="about">
+        <h2>Choose Your Career</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>🛠️ Auto Shop</h3>
+                <p>Master the art of vehicle maintenance. From oil changes to structural repairs, learn what it takes to keep the engines running.</p>
+            </div>
+            <div class="card">
+                <h3>🍳 Professional Chef</h3>
+                <p>Feel the heat of the kitchen. Manage orders, prep ingredients, and deliver high-quality meals under pressure.</p>
+            </div>
+            <div class="card">
+                <h3>✈️ Aviation Logistics</h3>
+                <p>Step into the airport and manage the complex world of transportation and passenger safety.</p>
+            </div>
+            <div class="card">
+                <h3>💻 Tech & IT</h3>
+                <p>Debug systems, set up networks, and explore the digital infrastructure that powers the modern world.</p>
+            </div>
+        </div>
+    </section>
+
+    <section style="background-color: rgba(0,0,0,0.2);">
+        <h2>How To Play</h2>
+        <div class="controls">
+            <ul class="key-list">
+                <li><span class="key">WASD</span> Movement</li>
+                <li><span class="key">SHIFT</span> Sprint</li>
+                <li><span class="key">SPACE</span> Jump</li>
+                <li><span class="key">MOUSE</span> Look</li>
+                <li><span class="key">ESC</span> Menu</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Clock-In Project Team. Built with Unity & Photon.</p>
+        <p>Generated by Gemini CLI</p>
+    </footer>
+
+</body>
+</html>

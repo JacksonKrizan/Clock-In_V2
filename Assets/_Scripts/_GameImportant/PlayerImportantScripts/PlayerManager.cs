@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.SceneManagement;
 
 
 
@@ -14,6 +15,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     PhotonView PV;
     //PhotonView PV;
     GameObject controller;
+    [SerializeField] int mapToPlayer;
 
     private void Awake()
     {
@@ -24,15 +26,43 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         if (PV.IsMine)
         {
-            CreateController();
+            CreateController(SceneManager.GetActiveScene());
         }
     }
 
-    void CreateController()
+    void CreateController(Scene scene)
     {
-        Debug.Log("Creating player controller for " + PV.Owner.NickName);
-        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        controller = PhotonNetwork.Instantiate("PhotonPrefabs/PlayerController", spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
+        //PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
+                    //controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "GamingPlayerController"), Vector3.zero, Quaternion.identity);
+
+        mapToPlayer = scene.buildIndex;
+        if (mapToPlayer == 1)
+        {
+            Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+            controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "GamingPlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
+        } 
+        else if (mapToPlayer == 2)
+        {
+            Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+            controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "FirePlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
+        }
+        else if (mapToPlayer == 3)
+        {
+            Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+            controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "AutoPlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
+        }else
+        {
+            Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+            controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
+        }
+
+
+
+
+
+        //Debug.Log("Creating player controller for " + PV.Owner.NickName);
+        //Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+        //controller = PhotonNetwork.Instantiate("PhotonPrefabs/PlayerController", spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
     }
     
     public override void OnPlayerEnteredRoom(Player newPlayer)
