@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.SceneManagement;
 
 
 
@@ -14,6 +15,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     PhotonView PV;
     //PhotonView PV;
     GameObject controller;
+    [SerializeField] int mapToPlayer;
 
     private void Awake()
     {
@@ -24,12 +26,35 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         if (PV.IsMine)
         {
-            CreateController();
+            CreateController(SceneManager.GetActiveScene());
         }
     }
 
-    void CreateController()
+    void CreateController(Scene scene)
     {
+
+        mapToPlayer = scene.buildIndex;
+        if (mapToPlayer == 1)
+        {
+            //PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
+            PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "GamingPlayerController"), Vector3.zero, Quaternion.identity);
+        }
+        if (mapToPlayer == 2)
+        {
+            //PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
+            PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "AutoPlayerController"), Vector3.zero, Quaternion.identity);
+        }
+        if (mapToPlayer == 3)
+        {
+            //PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
+            PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "FirePlayerController"), Vector3.zero, Quaternion.identity);
+        }
+
+
+
+
+
+
         Debug.Log("Creating player controller for " + PV.Owner.NickName);
         Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
         controller = PhotonNetwork.Instantiate("PhotonPrefabs/PlayerController", spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
