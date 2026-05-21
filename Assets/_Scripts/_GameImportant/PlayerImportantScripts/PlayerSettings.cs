@@ -11,12 +11,6 @@ public class PlayerSettings : MonoBehaviourPunCallbacks
     [SerializeField] GameObject settingsMenu;
     [SerializeField] GameObject howToPlayMenu;
     public bool isSettingsMenuOpen = false;
-    [SerializeField] PhotonView PV;
-
-    private void Awake()
-    {
-        PV = GetComponent<PhotonView>();
-    }
 
     public override void OnLeftRoom()
     {
@@ -26,17 +20,10 @@ public class PlayerSettings : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        /*if (!PV.IsMine) 
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            return; // If it's a remote player, ignore their input on our machine
+            OpenMenuAndUnlockCursor();
         }
-        if (!PV.IsMine)
-        {
-            if (Input.GetKeyDown(KeyCode.U))
-            {
-                OpenMenuAndUnlockCursor();
-            }
-        }*/
     }
 
     public void OpenMenuAndUnlockCursor()

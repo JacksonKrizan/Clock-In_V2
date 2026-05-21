@@ -259,7 +259,6 @@ MonoBehaviour:
   settingsMenu: {fileID: 2782896279537584738}
   howToPlayMenu: {fileID: 5989146207033279152}
   isSettingsMenuOpen: 0
-  PV: {fileID: 3295001617285701011}
 --- !u!114 &3244174968281949250
 MonoBehaviour:
   m_ObjectHideFlags: 0
