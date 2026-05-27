@@ -63,5 +63,18 @@ Trim the hedges evenly to improve the park’s appearance.
 Replace the broken streetlight bulb before nightfall.
 Collect trash from all bins to keep the area tidy.
 
+
+
+
+------
+Ideas
+Bugs
+Have bugs in and around the map the player is suposed to shoot when they see them and have different color of bugs to dipick different types of errors like for example syntax and logical errors or maybe overflow errors etc
+
+Make different bugs have different abiltys against the servers like for example syntax bugs have squiguly lines and overflow bugs will multyply etc.
+
+----
+dual key encryption for players to navigate private connections.
+
 👩‍🏫 Office & Education
 Organize the files alphabetically to speed up paperwork.
