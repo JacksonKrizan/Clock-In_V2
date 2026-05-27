@@ -4,7 +4,7 @@ using Photon.Pun;
 public class Packet : MonoBehaviourPun, IPunObservable
 {
     [Header("Settings")]
-    public string packetTag = "Packet";
+    public string packetTag = "Packages";
     public Color deliveryColor = Color.cyan;
     
     private Renderer rend;

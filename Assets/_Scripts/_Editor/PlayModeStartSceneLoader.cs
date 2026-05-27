@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class PlayModeStartSceneLoader
 {
     static PlayModeStartSceneLoader()
     {
+
         
         if (EditorBuildSettings.scenes.Length > 0)
         {
@@ -16,8 +18,8 @@ public class PlayModeStartSceneLoader
             if (sceneAsset != null)
             {
                 EditorSceneManager.playModeStartScene = sceneAsset;
-                Debug.Log($"<color=green>PlayModeStartSceneLoader:</color> Always starting from <b>{sceneAsset.name}</b>");
             }
         }
     }
 }
+#endif

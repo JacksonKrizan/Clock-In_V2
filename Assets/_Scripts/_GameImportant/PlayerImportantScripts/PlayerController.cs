@@ -75,7 +75,7 @@ void Awake()
 
     void Menu()
     {
-        if (Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             if (playerSettings != null)
             {
