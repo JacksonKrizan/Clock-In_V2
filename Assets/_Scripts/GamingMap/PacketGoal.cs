@@ -3,7 +3,7 @@ using Photon.Pun;
 
 public class PacketGoal : MonoBehaviour
 {
-    public string packetTag = "Packet";
+    public string packetTag = "Packages";
 
     void OnTriggerEnter(Collider other)
     {
