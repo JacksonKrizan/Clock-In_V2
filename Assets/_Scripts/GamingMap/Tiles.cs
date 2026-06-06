@@ -6,42 +6,45 @@ public class Tiles : MonoBehaviour
 {
     public List<GameObject> targets = new List<GameObject>();
     public Color glowColor = Color.cyan;
+    public BoxCollider TileBoxCollider;
+    public Material redTileMaterial;
+    public Material yellowTileMaterial;
+    public Material whiteTileMaterial;
+    public float yellowTileDuration = 1f;
+    
 
-    public float speed = UnityEngine.Random.Range(1.5f, 5.0f);
+    public Renderer TileRenderer;
+
+
+    public float speed;
 
 
 
-        void Start() 
+        void Start()
         {
-            
-            InvokeRepeating("TilesFaded", speed);
+            TileRenderer = GetComponent<Renderer>();
+
+            TileBoxCollider = GetComponent<BoxCollider>();
+            StartCoroutine(TilesFaded());
         }
 
-        void TilesFaded() 
+        IEnumerator TilesFaded()
         {
-            speed = UnityEngine.Random.Range(1.5f, 5.0f);
-            Debug.Log("Executed every 5 seconds!");
-        }
-
-
-    void Update()
-    {
-
-
-
-
-
-
-        float intensity = Mathf.PingPong(Time.time * speed, 1f);
-        foreach (var go in targets)
-        {
-            if (go == null) continue;
-            foreach (var r in go.GetComponentsInChildren<Renderer>())
+            while (true)
             {
-                var mat = r.material;
-                if (mat && mat.HasProperty("_EmissionColor"))
-                    mat.SetColor("_EmissionColor", glowColor * intensity);
+                speed = UnityEngine.Random.Range(3f, 10f);
+
+                yield return new WaitForSeconds(speed);
+                TileRenderer.material = yellowTileMaterial;
+                yield return new WaitForSeconds(yellowTileDuration);
+                TileBoxCollider.enabled = !TileBoxCollider.enabled;
+                TileRenderer.material = redTileMaterial;
+
+                yield return new WaitForSeconds(speed);
+                TileBoxCollider.enabled = !TileBoxCollider.enabled;
+                TileRenderer.material = whiteTileMaterial;
+
             }
         }
-    }
+
 }

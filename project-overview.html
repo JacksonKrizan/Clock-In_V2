@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clock-In_V2 — Project Overview</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --accent: #4fc3f7;
+    --accent2: #81c784;
+    --text: #e0e3ea;
+    --muted: #9aa0b0;
+    --border: #2a2e3d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem 1rem;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  header {
+    text-align: center;
+    padding: 2rem 1rem 2.5rem;
+  }
+  header h1 {
+    font-size: 2.4rem;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  header p.subtitle { color: var(--muted); margin-top: .5rem; font-size: 1.1rem; }
+  .badges { margin-top: 1rem; }
+  .badge {
+    display: inline-block;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: .25rem .85rem;
+    margin: .2rem;
+    font-size: .85rem;
+    color: var(--accent);
+  }
+  section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  h2 {
+    color: var(--accent);
+    font-size: 1.3rem;
+    margin-bottom: .75rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: .5rem;
+  }
+  h3 { color: var(--accent2); font-size: 1.05rem; margin: 1rem 0 .4rem; }
+  ul { padding-left: 1.4rem; }
+  li { margin: .3rem 0; }
+  code {
+    background: #11131b;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: .1rem .4rem;
+    font-family: "Cascadia Code", Consolas, monospace;
+    font-size: .88em;
+    color: #ffd180;
+  }
+  pre {
+    background: #11131b;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    font-family: "Cascadia Code", Consolas, monospace;
+    font-size: .85rem;
+    color: var(--text);
+    margin: .75rem 0;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: .75rem;
+  }
+  .tile {
+    background: #11131b;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  .tile h4 { color: var(--accent); margin-bottom: .35rem; font-size: .95rem; }
+  .tile p { color: var(--muted); font-size: .88rem; }
+  table { width: 100%; border-collapse: collapse; margin-top: .75rem; font-size: .9rem; }
+  th, td { text-align: left; padding: .5rem .75rem; border-bottom: 1px solid var(--border); }
+  th { color: var(--accent2); }
+  td code { white-space: nowrap; }
+  .status {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: .75rem;
+  }
+  .status .stat {
+    flex: 1 1 200px;
+    background: #11131b;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .85rem 1rem;
+  }
+  .stat .label { color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+  .stat .value { font-size: 1.05rem; color: var(--text); margin-top: .2rem; }
+  footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 1.5rem 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Clock-In_V2</h1>
+    <p class="subtitle">"JobSim" — A Multiplayer Educational Job Simulation Game</p>
+    <div class="badges">
+      <span class="badge">Unity 3D</span>
+      <span class="badge">C#</span>
+      <span class="badge">Photon PUN 2</span>
+      <span class="badge">Multiplayer</span>
+      <span class="badge">Educational</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>🎯 Core Concept</h2>
+    <p>
+      An open-world job simulation game where players experience different real-world careers
+      through interactive mini-games. The design philosophy is <strong>educational authenticity</strong> —
+      every task is grounded in reality and explains <em>why</em> it's done that way
+      (e.g., why electrical sockets are mounted at a specific height for accessibility).
+    </p>
+  </section>
+
+  <section>
+    <h2>💼 Job Categories</h2>
+    <div class="grid">
+      <div class="tile">
+        <h4>💻 Tech &amp; IT / Game Dev</h4>
+        <p>Networking education — TCP/IP, routing, protocols, packet delivery gameplay.</p>
+      </div>
+      <div class="tile">
+        <h4>🍳 Food &amp; Service</h4>
+        <p>Kitchen/chef job — order taking, grilling, restocking.</p>
+      </div>
+      <div class="tile">
+        <h4>🚗 Transportation &amp; Repair</h4>
+        <p>Auto shop — oil changes, tire pressure, part identification and matching.</p>
+      </div>
+      <div class="tile">
+        <h4>🔨 Construction &amp; Maintenance</h4>
+        <p>Ceiling tiles, painting, wood assembly.</p>
+      </div>
+      <div class="tile">
+        <h4>🌳 Outdoor &amp; Utility Work</h4>
+        <p>Landscaping and general repairs.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>📁 Project Structure</h2>
+    <pre>Clock-In_V2/
+├── Assets/
+│   ├── _Scripts/                # ~31 C# game scripts
+│   │   ├── _GameImportant/      # Core: player, menus, rooms
+│   │   ├── GamingMap/           # Networking mini-game
+│   │   ├── Kitchen/             # Chef job mechanics
+│   │   ├── AutoMap/             # Auto shop mechanics
+│   │   └── _Editor/             # Editor tooling
+│   ├── _Scenes/                 # _Menu, GameDev, AutoShop, Chef, TestField
+│   ├── Photon/                  # Photon PUN 2 networking library
+│   ├── CarMapPrefabs/           # Car shop prefabs
+│   ├── MapBuilding/             # Map construction assets
+│   ├── PhotonMenuPrefabs/       # Networking UI prefabs
+│   ├── UI_Prefabs/              # UI components
+│   └── kitchen assets/          # Chef job visuals
+├── Packages/                    # Unity package dependencies
+├── ProjectSettings/             # Unity configuration
+└── README.md</pre>
+  </section>
+
+  <section>
+    <h2>🧩 Key Scripts</h2>
+
+    <h3>Core Architecture (_GameImportant/)</h3>
+    <table>
+      <tr><th>Script</th><th>Purpose</th></tr>
+      <tr><td><code>PlayerController.cs</code></td><td>First-person movement and interaction</td></tr>
+      <tr><td><code>PlayerManager.cs</code></td><td>Networked player state and synchronization</td></tr>
+      <tr><td><code>Menu.cs</code> / <code>MenuManager.cs</code></td><td>Main menu UI logic</td></tr>
+      <tr><td><code>RoomManager.cs</code> / <code>RoomListItem.cs</code></td><td>Multiplayer room selection</td></tr>
+      <tr><td><code>Billboard.cs</code></td><td>Name tags above players</td></tr>
+    </table>
+
+    <h3>GameDev Mini-Game (Networking Education)</h3>
+    <table>
+      <tr><th>Script</th><th>Purpose</th></tr>
+      <tr><td><code>Packet.cs</code></td><td>Network packet objects with delivery mechanics</td></tr>
+      <tr><td><code>PacketGoal.cs</code></td><td>Packet delivery destination/objective</td></tr>
+      <tr><td><code>Tiles.cs</code> / <code>FadeTiles.cs</code></td><td>Interactive game-board tiles and visual feedback</td></tr>
+      <tr><td><code>IPdraggable.cs</code></td><td>Draggable IP address components</td></tr>
+      <tr><td><code>Clickable.cs</code></td><td>Generic click interaction handler</td></tr>
+    </table>
+
+    <h3>Job Mini-Games</h3>
+    <table>
+      <tr><th>Script</th><th>Purpose</th></tr>
+      <tr><td><code>Grabbing.cs</code></td><td>Kitchen — object pickup and manipulation</td></tr>
+      <tr><td><code>PickUp.cs</code></td><td>Auto shop — vehicle component pickup</td></tr>
+      <tr><td><code>RecivingList.cs</code></td><td>Auto shop — task tracking/checklist</td></tr>
+      <tr><td><code>CompareTags.cs</code></td><td>Auto shop — inventory/part matching</td></tr>
+      <tr><td><code>wheel attach.cs</code> / <code>Parts.cs</code></td><td>Auto shop — wheel assembly &amp; part identification</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>🚧 Current Development Status</h2>
+    <div class="status">
+      <div class="stat">
+        <div class="label">Active Branch</div>
+        <div class="value">Jackson's_GameDevMap</div>
+      </div>
+      <div class="stat">
+        <div class="label">Branch State</div>
+        <div class="value">Up to date with remote</div>
+      </div>
+      <div class="stat">
+        <div class="label">Current Focus</div>
+        <div class="value">GameDev networking mini-game</div>
+      </div>
+    </div>
+
+    <h3>Recent Commits</h3>
+    <table>
+      <tr><th>Commit</th><th>Change</th></tr>
+      <tr><td><code>ca43736c</code></td><td>Timer implementation for game challenges</td></tr>
+      <tr><td><code>1cb0c650</code></td><td>Added tile list functionality</td></tr>
+      <tr><td><code>3e766336</code></td><td>Button work and packet placement</td></tr>
+      <tr><td><code>a425f3ba</code></td><td>Packet game core implementation</td></tr>
+      <tr><td><code>25ed88a4</code></td><td>Multiplayer prefab merge (PR #8) — fixed spawning bugs</td></tr>
+      <tr><td><code>cf67b8d0</code></td><td>Fixed player prefabs for each game mode</td></tr>
+    </table>
+
+    <p style="margin-top:.75rem; color: var(--muted);">
+      Multiplayer/spawning infrastructure was recently stabilized; current work centers on the
+      packet-delivery gameplay loop (packets → tiles → goals → timer).
+    </p>
+  </section>
+
+  <section>
+    <h2>⚙️ Technical Requirements</h2>
+    <ul>
+      <li>Playable on Windows 10, macOS, web browser, or mobile</li>
+      <li>Multiplayer support via Photon networking</li>
+      <li>Secure implementation</li>
+      <li>No game-breaking bugs</li>
+    </ul>
+  </section>
+
+  <footer>
+    Clock-In_V2 project overview — generated June 3, 2026
+  </footer>
+
+</div>
+</body>
+</html>
