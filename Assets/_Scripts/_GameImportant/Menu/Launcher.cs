@@ -65,7 +65,12 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         MenuManager.Instance.OpenMenu("title");
         Debug.Log("Joined Lobby");
-        PhotonNetwork.NickName = "Player" + Random.Range(0, 1000).ToString("0000");
+        // Only assign a random fallback name if nothing has set one yet. This preserves
+        // the display name chosen by AuthManager (sign-in) or PlayerNameManager (guest).
+        if (string.IsNullOrEmpty(PhotonNetwork.NickName))
+        {
+            PhotonNetwork.NickName = "Player" + Random.Range(0, 1000).ToString("0000");
+        }
     }
     // Update is called once per frame
 

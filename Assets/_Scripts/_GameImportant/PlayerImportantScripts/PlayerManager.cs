@@ -17,22 +17,16 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         PV = GetComponent<PhotonView>();
     }
 
-    public override void OnEnable()
+    void Start()
     {
-        base.OnEnable();
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
+        // RoomManager instantiates this PlayerManager AFTER the scene has finished
+        // loading (it waits for the room to be ready first), so listening for
+        // SceneManager.sceneLoaded would never fire for the current scene. Spawning
+        // from Start() runs as soon as this object is created, which is what we want.
 
-    public override void OnDisable()
-    {
-        base.OnDisable();
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        // Don't spawn if we are in the Menu
-        if (scene.name == "_Menu" || scene.name == "Menu") return;
+        // Safety net: never spawn a player in the menu.
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName == "_Menu" || sceneName == "Menu") return;
 
         if (PV.IsMine)
         {
@@ -61,9 +55,21 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
         //Debug.Log($"[PlayerManager] Map detected: {sceneName}. Choosing prefab: {prefabName}");
 
+        // Use a spawn point if a SpawnManager exists in this scene; otherwise fall back
+        // to the origin so a missing SpawnManager can't crash the spawn.
         Vector3 spawnPos = Vector3.zero;
         Quaternion spawnRot = Quaternion.identity;
-        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+        if (SpawnManager.Instance != null)
+        {
+            Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+            spawnPos = spawnpoint.position;
+            spawnRot = spawnpoint.rotation;
+        }
+        else
+        {
+            Debug.LogWarning("[PlayerManager] No SpawnManager in scene - spawning at origin.");
+        }
+
         controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs/", prefabName), spawnPos, spawnRot, 0, new object[] { PV.ViewID });
     }
 
