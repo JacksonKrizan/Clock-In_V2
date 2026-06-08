@@ -30,7 +30,11 @@ public class PickUp : MonoBehaviour
     void Start()
     {
         LayerNumber = LayerMask.NameToLayer("holdLayer");
-
+        if (LayerNumber == -1)
+        {
+            Debug.LogWarning("Layer 'holdLayer' not found in Tag and Layer settings. Please create it! Defaulting to layer 0.");
+            LayerNumber = 0;
+        }
     }
     void Update()
     {
