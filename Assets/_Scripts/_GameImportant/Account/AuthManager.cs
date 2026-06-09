@@ -37,6 +37,7 @@ public class AuthManager : MonoBehaviour
 
     private void Init()
     {
+        if (auth != null) return; // guard against OnReady firing after an initial IsReady hit
         auth = FirebaseAuth.DefaultInstance;
     }
 
@@ -88,6 +89,11 @@ public class AuthManager : MonoBehaviour
     /// <summary>Play without an account. Scores are NOT written to the leaderboard.</summary>
     public void ContinueAsGuest(string displayName)
     {
+        // Drop any real Firebase session first, otherwise CurrentUser (and CurrentUid)
+        // would still report the previous signed-in account while IsGuest is true,
+        // letting a "guest" leak a real uid to the leaderboard.
+        if (auth != null && auth.CurrentUser != null) auth.SignOut();
+
         string name = string.IsNullOrWhiteSpace(displayName)
             ? "Guest" + UnityEngine.Random.Range(0, 10000).ToString("0000")
             : displayName;

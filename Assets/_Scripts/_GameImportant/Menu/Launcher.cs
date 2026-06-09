@@ -42,6 +42,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     void Start()
     {
         Debug.Log("Connecting to Master");
+        MenuManager.Instance.OpenMenu("loading"); // show loading while we connect to Photon
         PhotonNetwork.ConnectUsingSettings();
     }
     /*public void OnMapNumberInputValueChanged()
@@ -63,7 +64,11 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        MenuManager.Instance.OpenMenu("title");
+#if FIREBASE_ENABLED
+        MenuManager.Instance.OpenMenu("login"); // make the player log in before the title screen
+#else
+        MenuManager.Instance.OpenMenu("title"); // no Firebase yet: keep the old straight-to-title flow
+#endif
         Debug.Log("Joined Lobby");
         // Only assign a random fallback name if nothing has set one yet. This preserves
         // the display name chosen by AuthManager (sign-in) or PlayerNameManager (guest).

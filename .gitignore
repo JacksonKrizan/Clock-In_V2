@@ -385,3 +385,14 @@ _Builds/WindowsBuild_Clock-IN/MonoBleedingEdge/etc/mono/config
 _Builds/WindowsBuild_Clock-IN/MonoBleedingEdge/etc/mono/mconfig/config.xml
 _Builds/WindowsBuild_Clock-IN/UnityCrashHandler64.exe
 _Builds/WindowsBuild_Clock-IN/UnityPlayer.dll
+
+# --- Firebase native libs for OTHER platforms (added by Simon, 2026-06-09) ---
+# These Mac (.bundle) and Linux (.so) binaries are NOT used by the Windows Unity
+# Editor or Windows builds, and the .bundle is >100MB (GitHub's hard limit).
+# Windows uses FirebaseCppApp-*.dll (~16MB) which IS committed, so pulling onto
+# another Windows PC works with no reinstall. If you ever work on Mac/Linux,
+# re-import the Firebase SDK on that machine to regenerate these.
+Assets/Firebase/Plugins/x86_64/*.bundle
+Assets/Firebase/Plugins/x86_64/*.bundle.meta
+Assets/Firebase/Plugins/x86_64/*.so
+Assets/Firebase/Plugins/x86_64/*.so.meta
