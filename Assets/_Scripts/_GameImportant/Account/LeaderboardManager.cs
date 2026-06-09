@@ -71,6 +71,13 @@ public class LeaderboardManager : MonoBehaviour
         // Only overwrite if this beats the player's stored best.
         entryRef.Child("score").GetValueAsync().ContinueWithOnMainThread(task =>
         {
+            if (task.IsFaulted)
+            {
+                Debug.LogError($"[LeaderboardManager] Could NOT READ existing score (check " +
+                               $"Realtime Database rules / that the DB exists): {task.Exception}");
+                return;
+            }
+
             int best = 0;
             if (task.IsCompleted && task.Result != null && task.Result.Value != null)
                 int.TryParse(task.Result.Value.ToString(), out best);
@@ -87,8 +94,14 @@ public class LeaderboardManager : MonoBehaviour
                 { "score", score },
                 { "updatedAt", ServerValue.Timestamp },
             };
-            entryRef.UpdateChildrenAsync(data).ContinueWithOnMainThread(_ =>
-                Debug.Log($"[LeaderboardManager] Submitted score {score}."));
+            entryRef.UpdateChildrenAsync(data).ContinueWithOnMainThread(writeTask =>
+            {
+                if (writeTask.IsFaulted)
+                    Debug.LogError($"[LeaderboardManager] WRITE FAILED (almost always a " +
+                                   $"Realtime Database rules problem): {writeTask.Exception}");
+                else
+                    Debug.Log($"[LeaderboardManager] Submitted score {score} for '{auth.DisplayName}'.");
+            });
         });
     }
 

@@ -16,6 +16,11 @@ public class ScoreManager : MonoBehaviour
 
     [SerializeField] private int startingScore = 0;
 
+    [Tooltip("When on, every score change tries to save your best to the leaderboard " +
+             "automatically (no-op for guests). Turn off if you'd rather submit only at " +
+             "the end of a match via SubmitToLeaderboard().")]
+    [SerializeField] private bool autoSubmitOnChange = true;
+
     /// <summary>The player's current running score.</summary>
     public int CurrentScore { get; private set; }
 
@@ -46,6 +51,10 @@ public class ScoreManager : MonoBehaviour
         CurrentScore += points;
         OnScoreChanged?.Invoke(CurrentScore);
         Debug.Log($"[ScoreManager] {(points >= 0 ? "+" : "")}{points} -> {CurrentScore}");
+
+        // Save progress automatically so scores actually reach the leaderboard. The
+        // leaderboard layer ignores this for guests and only writes a new personal best.
+        if (autoSubmitOnChange) SubmitToLeaderboard();
     }
 
     /// <summary>Reset the running total back to the starting score (e.g. a new match).</summary>

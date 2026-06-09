@@ -59,10 +59,17 @@ Scripts are split into two layers:
 - GameObject **`LeaderboardManager`** → add `LeaderboardManager`.
   (All three are `DontDestroyOnLoad` singletons — one each.)
 
-**Auth panel** (gate before the room/lobby UI): add `AuthMenuUI` and assign
-- `emailInput`, `passwordInput`, `displayNameInput` (TMP_InputFields)
-- `statusText` (TMP_Text for errors)
-- Buttons → OnClick → `AuthMenuUI.OnSignUpClicked` / `OnSignInClicked` / `OnGuestClicked`.
+**Auth is three menus** (set each panel's `Menu` component `Menu Name` exactly):
+- **`login`** (landing) — add `LoginLandingUI`. Buttons → OnClick:
+  `OnSignInMenuClicked` (opens signin), `OnSignUpMenuClicked` (opens signup),
+  `OnGuestClicked` (goes to title). Optional `guestNameInput` for a guest's name.
+- **`signin`** — add `SignInMenuUI`; assign `emailInput`, `passwordInput`, `statusText`.
+  Buttons → `OnSignInClicked`, `OnBackClicked`.
+- **`signup`** — add `SignUpMenuUI`; assign `emailInput`, `passwordInput`,
+  `gamerTagInput`, `statusText`. Buttons → `OnSignUpClicked`, `OnBackClicked`.
+
+Launcher opens `login` after joining the Photon lobby (only when FIREBASE_ENABLED).
+A successful sign-in/sign-up/guest opens `title`.
 
 **Leaderboard panel**: add `LeaderboardUI` and assign
 - `content` (the scroll-view Content transform)

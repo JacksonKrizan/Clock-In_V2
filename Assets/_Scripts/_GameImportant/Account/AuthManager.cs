@@ -100,6 +100,17 @@ public class AuthManager : MonoBehaviour
         ApplySignIn(name, true);
     }
 
+    /// <summary>Sign out of the current account (or end a guest session) and clear state.</summary>
+    public void SignOut()
+    {
+        if (auth != null && auth.CurrentUser != null) auth.SignOut();
+        IsGuest = false;
+        DisplayName = null;
+        PhotonNetwork.NickName = "";
+        PlayerPrefs.DeleteKey("username");
+        Debug.Log("[AuthManager] Signed out.");
+    }
+
     private void ApplySignIn(string name, bool guest)
     {
         IsGuest = guest;
@@ -111,11 +122,37 @@ public class AuthManager : MonoBehaviour
 
     private static string FriendlyError(AggregateException ex)
     {
-        if (ex == null) return "Unknown error.";
+        if (ex == null) return "Something went wrong. Try again.";
         foreach (Exception inner in ex.Flatten().InnerExceptions)
         {
             if (inner is FirebaseException fe)
-                return ((AuthError)fe.ErrorCode).ToString();
+            {
+                switch ((AuthError)fe.ErrorCode)
+                {
+                    case AuthError.UserNotFound:
+                        return "No account found for that email. Try Sign Up.";
+                    case AuthError.WrongPassword:
+                        return "Wrong password.";
+                    case AuthError.InvalidCredential:   // newer SDKs lump wrong email/password here
+                        return "Wrong email or password.";
+                    case AuthError.InvalidEmail:
+                        return "That doesn't look like a valid email.";
+                    case AuthError.MissingEmail:
+                        return "Enter an email.";
+                    case AuthError.MissingPassword:
+                        return "Enter a password.";
+                    case AuthError.EmailAlreadyInUse:
+                        return "That email is already registered. Try Sign In.";
+                    case AuthError.WeakPassword:
+                        return "Password is too weak (use at least 6 characters).";
+                    case AuthError.TooManyRequests:
+                        return "Too many attempts. Wait a bit and try again.";
+                    case AuthError.NetworkRequestFailed:
+                        return "No internet connection.";
+                    default:
+                        return "Sign-in failed: " + (AuthError)fe.ErrorCode;
+                }
+            }
         }
         return ex.Message;
     }
