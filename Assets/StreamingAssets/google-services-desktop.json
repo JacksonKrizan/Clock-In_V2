@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "907063505194",
+    "firebase_url": "https://clock-in-46d8b-default-rtdb.firebaseio.com",
+    "project_id": "clock-in-46d8b",
+    "storage_bucket": "clock-in-46d8b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907063505194:android:3b5269134afe47eca66e53",
+        "android_client_info": {
+          "package_name": "com.job.clockin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUtkk4vLtCXxgZ11KYTXgJ0p_FwFVQmFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

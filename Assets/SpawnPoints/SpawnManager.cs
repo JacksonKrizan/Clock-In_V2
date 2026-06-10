@@ -13,7 +13,7 @@ public class SpawnManager : MonoBehaviour
     {
         Instance = this;
         spawnpoints = GetComponentsInChildren<Spawnpoint>();
-        Debug.Log("Found " + spawnpoints.Length + " spawnpoints.");
+        //Debug.Log("Found " + spawnpoints.Length + " spawnpoints.");
     }
 
     public Transform GetSpawnpoint()
