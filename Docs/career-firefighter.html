@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clock-In — Firefighter Deep Dive</title>
+<style>
+  :root{
+    --navy:#0e1a2b; --navy2:#16273d; --navy3:#0a1320;
+    --cyan:#2dd4ee; --blue:#38bdf8; --amber:#f5c242;
+    --green:#34d399; --red:#ef6f6f;
+    --light:#f1f5f9; --muted:#9fb3c8; --white:#ffffff;
+    --accent:var(--red);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#05080d;font-family:"Segoe UI",Calibri,system-ui,sans-serif;color:var(--light);line-height:1.6}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px 80px}
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);
+    border-bottom:5px solid var(--accent);padding:54px 0 40px;margin-bottom:36px}
+  .hero .inner{max-width:980px;margin:0 auto;padding:0 24px}
+  .back{display:inline-block;color:var(--accent);text-decoration:none;font-size:13px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;margin-bottom:20px;opacity:.9}
+  .back:hover{opacity:1;text-decoration:underline}
+  .kicker{color:var(--accent);font-weight:700;letter-spacing:.14em;font-size:14px;text-transform:uppercase}
+  h1{color:var(--white);font-size:46px;font-weight:800;line-height:1.05;margin:6px 0 14px}
+  .tagline{font-size:19px;color:var(--light);font-style:italic;max-width:680px}
+  .badges{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{background:var(--navy2);border:1px solid #2a3f59;border-radius:999px;padding:5px 14px;
+    font-size:12px;color:var(--accent);font-weight:600}
+  .badge.prog{background:var(--accent);color:var(--white);border-color:var(--accent)}
+
+  section.block{margin-bottom:34px}
+  h2{color:var(--white);font-size:27px;font-weight:800;display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  h2 .dot{width:14px;height:14px;border-radius:3px;background:var(--accent);display:inline-block}
+  h2 .made{background:var(--cyan)} h2 .play{background:var(--green)} h2 .imp{background:var(--amber)}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+  h3{color:var(--accent);font-size:17px;margin:20px 0 8px}
+
+  .card{background:var(--navy2);border-radius:10px;padding:20px 24px;margin-bottom:14px;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;left:0;top:0;width:6px;height:100%;background:var(--accent)}
+  .card.c::before{background:var(--cyan)} .card.g::before{background:var(--green)} .card.a::before{background:var(--amber)}
+  p{font-size:15px;color:var(--light);margin:8px 0}
+  p.body{color:var(--muted)}
+  ul{margin:8px 0 8px 4px;list-style:none}
+  li{font-size:14.5px;color:var(--muted);margin:7px 0;padding-left:22px;position:relative;line-height:1.45}
+  li::before{content:"▹";color:var(--accent);font-weight:700;position:absolute;left:0}
+  li.g::before{content:"✓";color:var(--green)} li.b::before{content:"✗";color:var(--red)}
+  b.cyan{color:var(--cyan)} b.green{color:var(--green)} b.amber{color:var(--amber)} b.red{color:var(--red)} b.w{color:var(--white)}
+  code{background:var(--navy3);color:#ff9b9b;font-family:"Cascadia Code",Consolas,monospace;
+    font-size:13px;padding:2px 7px;border-radius:5px;border:1px solid #233247}
+  .steps{counter-reset:s}
+  .stepc{background:var(--navy2);border-radius:9px;padding:14px 18px 14px 60px;margin:10px 0;position:relative}
+  .stepc::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:0;bottom:0;width:46px;
+    display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--white);
+    font-weight:800;font-size:20px;border-radius:9px 0 0 9px}
+  .stepc h4{color:var(--white);font-size:15px;margin-bottom:2px}
+  .stepc p{font-size:13.5px;color:var(--muted);margin:0}
+  .note{background:var(--navy3);border-left:5px solid var(--amber);border-radius:7px;padding:13px 18px;margin:14px 0}
+  .note .h{color:var(--amber);font-weight:700;font-size:13px;margin-bottom:4px}
+  .note p{font-size:13.5px;color:var(--light);margin:0}
+  .tag-plan{display:inline-block;font-size:11px;font-weight:700;color:var(--amber);
+    border:1px solid var(--amber);border-radius:5px;padding:1px 7px;margin-left:8px;vertical-align:middle}
+  ol.todo{list-style:none;counter-reset:t;margin:6px 0 0;padding:0}
+  ol.todo li{font-size:14.5px;color:var(--light);margin:0;padding:12px 10px 12px 48px;position:relative;
+    border-bottom:1px solid #1b2a3d;line-height:1.45}
+  ol.todo li:last-child{border-bottom:none}
+  ol.todo li::before{counter-increment:t;content:counter(t);position:absolute;left:8px;top:10px;width:28px;height:28px;
+    display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--white);
+    font-weight:800;font-size:13px;border-radius:6px}
+  .toplink{display:flex;justify-content:center;margin:26px 0 6px}
+  .toplink a{display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:var(--white);
+    text-decoration:none;font-weight:800;font-size:14px;letter-spacing:.03em;padding:13px 30px;border-radius:9px;transition:opacity .15s}
+  .toplink a:hover{opacity:.85}
+  #totop{position:fixed;right:22px;bottom:22px;z-index:60;background:var(--accent);color:var(--white);
+    border:none;border-radius:50%;width:50px;height:50px;font-size:24px;font-weight:800;cursor:pointer;line-height:1;
+    box-shadow:0 6px 18px rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .25s}
+  #totop.show{opacity:.95;pointer-events:auto}
+  #totop:hover{opacity:1}
+  footer{text-align:center;color:#41566e;font-size:12px;margin-top:50px;border-top:1px solid #1b2a3d;padding-top:24px}
+  footer a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="hero" id="top">
+  <div class="inner">
+    <a class="back" href="Clock-In - FBLA Nationals 2026.html#jobs">← Back to presentation</a>
+    <div class="kicker">Career Deep Dive · 03 · The Jobs</div>
+    <h1>Firefighter</h1>
+    <p class="tagline">Operate gear and respond to emergencies to save lives — our next career, with the level built and the systems ready.</p>
+    <div class="badges">
+      <span class="badge prog">● IN PROGRESS</span>
+      <span class="badge">Scene: Firemap.unity</span>
+      <span class="badge">Art: FirefightersPack</span>
+      <span class="badge">Teaches: emergency response</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="note">
+    <div class="h">Where it stands today</div>
+    <p>Firefighter is the career we're actively building. The <code>Firemap.unity</code> scene already exists (a substantial ~16&nbsp;MB level), a dedicated <code>FirePlayerController</code> prefab is wired into the multiplayer spawn system, and firefighting art assets are in the project. What's left is the gameplay scripting — so this page covers the <b class="w">groundwork that's done</b>, the <b class="w">design we're building toward</b>, and the <b class="w">plan to finish it</b>.</p>
+  </div>
+
+  <!-- HOW IT WAS MADE -->
+  <section class="block">
+    <h2><span class="dot made"></span>How it was made <span class="tag-plan">groundwork laid</span></h2>
+    <p class="sub">The foundation is real and in-repo; the mechanic scripts are the remaining piece.</p>
+
+    <div class="card c">
+      <h3>What already exists</h3>
+      <ul>
+        <li class="g"><b class="w">Firemap.unity</b> — the environment is built and laid out as a full scene.</li>
+        <li class="g"><b class="w">FirePlayerController.prefab</b> — a per-career player prefab, alongside <code>GamingPlayerController</code> and <code>AutoPlayerController</code>, so the networked spawn system already knows how to drop a firefighter into this scene.</li>
+        <li class="g"><b class="w">FirefightersPack assets</b> — firefighting art/props are imported and available.</li>
+        <li class="g"><b class="w">Shared systems</b> — the same <code>ScoreManager</code> / <code>ScoreNetworkSync</code> and Photon room flow the other jobs use are ready to plug into.</li>
+      </ul>
+    </div>
+
+    <div class="card a">
+      <h3>What still needs building</h3>
+      <ul>
+        <li>A <code>Assets/_Scripts/Firemap/</code> folder — today there's no script implementation for the job.</li>
+        <li>A hose-control mechanic: raycast to aim, hold to spray (it can reuse the proven first-person input model from the other jobs).</li>
+        <li>Fire objects that extinguish under sustained spray, and fire-spread logic to nearby flammable props over time.</li>
+        <li>A rescue/objective scenario plus scoring wired into <code>ScoreManager</code>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- HOW IT'S PLAYED -->
+  <section class="block">
+    <h2><span class="dot play"></span>How it's played <span class="tag-plan">intended design</span></h2>
+    <p class="sub">The target gameplay loop we're designing toward.</p>
+    <div class="steps">
+      <div class="stepc"><h4>Respond to the call</h4><p>You spawn into the Firemap scene as the firefighter — an active emergency is underway.</p></div>
+      <div class="stepc"><h4>Gear up &amp; aim</h4><p>Operate firefighting gear; aim the hose with a forward raycast, the same interaction backbone the other jobs already use.</p></div>
+      <div class="stepc"><h4>Fight the fire</h4><p>Hold to spray; sustained contact extinguishes a fire. Move fast — fire spreads to nearby flammable objects if you're too slow.</p></div>
+      <div class="stepc"><h4>Save lives</h4><p>Reach and rescue civilians within the time limit; minimize collateral damage.</p></div>
+      <div class="stepc"><h4>Scored &amp; synced</h4><p>Speed and efficiency feed the shared scoreboard, synced across the room over Photon like every other job.</p></div>
+    </div>
+    <div class="card g">
+      <h3>What it will teach</h3>
+      <ul>
+        <li class="g"><b class="green">Emergency response</b> — staying calm and acting fast under pressure.</li>
+        <li class="g"><b class="green">Prioritization &amp; triage</b> — deciding what to tackle first when everything's urgent.</li>
+        <li class="g"><b class="green">Cause &amp; effect</b> — fire spreads if ignored; early action contains it.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- HOW IT COULD BE IMPROVED / BUILD PLAN -->
+  <section class="block">
+    <h2><span class="dot imp"></span>How to finish &amp; improve it</h2>
+    <p class="sub">A concrete build path from the current scene to a complete, polished job.</p>
+
+    <div class="card">
+      <h3>Phase 1 — make it playable</h3>
+      <ul>
+        <li>Create <code>Assets/_Scripts/Firemap/</code> with a <code>HoseController</code> (aim + spray) reusing the shared first-person input.</li>
+        <li>A <code>Fire</code> component with a health value that drops while sprayed and extinguishes at zero.</li>
+        <li>A <code>FireManager</code> to track active fires, end the round, and report the score.</li>
+        <li>Wire scoring into the existing <code>ScoreManager</code> so it shows on the live scoreboard immediately.</li>
+      </ul>
+    </div>
+    <div class="card a">
+      <h3>Phase 2 — depth</h3>
+      <ul>
+        <li>Fire-spread logic: untended fire jumps to nearby flammable props over time, creating urgency.</li>
+        <li>Civilian rescue objectives with a countdown and a "saved / lost" tally.</li>
+        <li>Difficulty scaling: more ignition points and faster spread as the score climbs.</li>
+        <li>Particle + audio feedback (flame, steam on extinguish, alarms) — leaning on the FirefightersPack assets.</li>
+      </ul>
+    </div>
+    <div class="card c">
+      <h3>Phase 3 — multiplayer &amp; polish</h3>
+      <ul>
+        <li>Network fire state over Photon (master-client authoritative) so a fire extinguished by one player reads out for everyone — learning from the networking game's duplicate-scoring pitfall.</li>
+        <li>Co-op roles: one player on the hose, another guiding rescues.</li>
+        <li>A pre-mission briefing and post-mission review (fires out, civilians saved, time, damage).</li>
+      </ul>
+    </div>
+    <div class="card g">
+      <h3>Educational value</h3>
+      <ul>
+        <li>In-the-moment tips on real fire science — the fire triangle (heat, fuel, oxygen), why you cut off one side to stop a fire.</li>
+        <li>Stop-drop-roll and evacuation-order callouts framed as gameplay guidance.</li>
+        <li>Tie the score to real response metrics so the lesson sticks.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TO-DO -->
+  <section class="block">
+    <h2><span class="dot imp"></span>To-do list <span style="font-size:14px;color:var(--muted);font-weight:600">· 10 tasks to build this job</span></h2>
+    <p class="sub">The build backlog to take Firefighter from scene to shipped.</p>
+    <div class="card">
+      <ol class="todo">
+        <li>Create the <code>Assets/_Scripts/Firemap/</code> folder to hold the job's scripts.</li>
+        <li>Build a <code>HoseController</code> (aim raycast + hold-to-spray) reusing the shared first-person input.</li>
+        <li>Add a <code>Fire</code> component with a health value that drops while sprayed and extinguishes at zero.</li>
+        <li>Add a <code>FireManager</code> to track active fires, end the round, and report the score.</li>
+        <li>Wire scoring into the shared <code>ScoreManager</code> so it shows on the live scoreboard.</li>
+        <li>Implement fire-spread to nearby flammable props over time to create urgency.</li>
+        <li>Add civilian rescue objectives with a countdown and a saved / lost tally.</li>
+        <li>Network fire state over Photon (master-client authoritative) so extinguishes sync to everyone.</li>
+        <li>Add particle and audio feedback (flame, steam, alarms) using the FirefightersPack assets.</li>
+        <li>Add a pre-mission briefing and a post-mission review (fires out, civilians saved, time, damage).</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="toplink"><a href="#top">↑ Back to top</a></div>
+
+  <footer>
+    Clock-In · FBLA National Leadership Conference 2026 &nbsp;·&nbsp; <a href="Clock-In - FBLA Nationals 2026.html#jobs">← Back to presentation</a><br>
+    Foundation in repo: Firemap.unity · FirePlayerController · FirefightersPack · (shared) ScoreManager
+  </footer>
+</div>
+<button id="totop" title="Back to top" aria-label="Back to top">↑</button>
+<script>
+  const tt=document.getElementById('totop');
+  addEventListener('scroll',()=>tt.classList.toggle('show',scrollY>400));
+  tt.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+</script>
+</body>
+</html>

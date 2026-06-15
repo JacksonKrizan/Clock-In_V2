@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clock-In — Network Engineer Deep Dive</title>
+<style>
+  :root{
+    --navy:#0e1a2b; --navy2:#16273d; --navy3:#0a1320;
+    --cyan:#2dd4ee; --blue:#38bdf8; --amber:#f5c242;
+    --green:#34d399; --red:#ef6f6f;
+    --light:#f1f5f9; --muted:#9fb3c8; --white:#ffffff;
+    --accent:var(--cyan);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#05080d;font-family:"Segoe UI",Calibri,system-ui,sans-serif;color:var(--light);line-height:1.6}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px 80px}
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);
+    border-bottom:5px solid var(--accent);padding:54px 0 40px;margin-bottom:36px}
+  .hero .inner{max-width:980px;margin:0 auto;padding:0 24px}
+  .back{display:inline-block;color:var(--accent);text-decoration:none;font-size:13px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;margin-bottom:20px;opacity:.9}
+  .back:hover{opacity:1;text-decoration:underline}
+  .kicker{color:var(--accent);font-weight:700;letter-spacing:.14em;font-size:14px;text-transform:uppercase}
+  h1{color:var(--white);font-size:46px;font-weight:800;line-height:1.05;margin:6px 0 14px}
+  .tagline{font-size:19px;color:var(--light);font-style:italic;max-width:680px}
+  .badges{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{background:var(--navy2);border:1px solid #2a3f59;border-radius:999px;padding:5px 14px;
+    font-size:12px;color:var(--accent);font-weight:600}
+  .badge.featured{background:var(--accent);color:var(--navy);border-color:var(--accent)}
+
+  section.block{margin-bottom:34px}
+  h2{color:var(--white);font-size:27px;font-weight:800;display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  h2 .dot{width:14px;height:14px;border-radius:3px;background:var(--accent);display:inline-block}
+  h2 .made{background:var(--cyan)} h2 .play{background:var(--green)} h2 .imp{background:var(--amber)}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+  h3{color:var(--accent);font-size:17px;margin:20px 0 8px}
+
+  .card{background:var(--navy2);border-radius:10px;padding:20px 24px;margin-bottom:14px;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;left:0;top:0;width:6px;height:100%;background:var(--accent)}
+  .card.g::before{background:var(--green)} .card.a::before{background:var(--amber)}
+  p{font-size:15px;color:var(--light);margin:8px 0}
+  p.body{color:var(--muted)}
+  ul{margin:8px 0 8px 4px;list-style:none}
+  li{font-size:14.5px;color:var(--muted);margin:7px 0;padding-left:22px;position:relative;line-height:1.45}
+  li::before{content:"▹";color:var(--accent);font-weight:700;position:absolute;left:0}
+  li.g::before{content:"✓";color:var(--green)} li.b::before{content:"✗";color:var(--red)}
+  b.cyan{color:var(--cyan)} b.green{color:var(--green)} b.amber{color:var(--amber)} b.red{color:var(--red)} b.w{color:var(--white)}
+  code{background:var(--navy3);color:var(--cyan);font-family:"Cascadia Code",Consolas,monospace;
+    font-size:13px;padding:2px 7px;border-radius:5px;border:1px solid #233247}
+  .steps{counter-reset:s}
+  .stepc{background:var(--navy2);border-radius:9px;padding:14px 18px 14px 60px;margin:10px 0;position:relative}
+  .stepc::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:0;bottom:0;width:46px;
+    display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--navy);
+    font-weight:800;font-size:20px;border-radius:9px 0 0 9px}
+  .stepc h4{color:var(--white);font-size:15px;margin-bottom:2px}
+  .stepc p{font-size:13.5px;color:var(--muted);margin:0}
+  .files{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+  .files code{font-size:12px}
+  .note{background:var(--navy3);border-left:5px solid var(--blue);border-radius:7px;padding:13px 18px;margin:14px 0}
+  .note .h{color:var(--blue);font-weight:700;font-size:13px;margin-bottom:4px}
+  .note p{font-size:13.5px;color:var(--light);margin:0}
+  ol.todo{list-style:none;counter-reset:t;margin:6px 0 0;padding:0}
+  ol.todo li{font-size:14.5px;color:var(--light);margin:0;padding:12px 10px 12px 48px;position:relative;
+    border-bottom:1px solid #1b2a3d;line-height:1.45}
+  ol.todo li:last-child{border-bottom:none}
+  ol.todo li::before{counter-increment:t;content:counter(t);position:absolute;left:8px;top:10px;width:28px;height:28px;
+    display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--navy);
+    font-weight:800;font-size:13px;border-radius:6px}
+  .toplink{display:flex;justify-content:center;margin:26px 0 6px}
+  .toplink a{display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:var(--navy);
+    text-decoration:none;font-weight:800;font-size:14px;letter-spacing:.03em;padding:13px 30px;border-radius:9px;transition:opacity .15s}
+  .toplink a:hover{opacity:.85}
+  #totop{position:fixed;right:22px;bottom:22px;z-index:60;background:var(--accent);color:var(--navy);
+    border:none;border-radius:50%;width:50px;height:50px;font-size:24px;font-weight:800;cursor:pointer;line-height:1;
+    box-shadow:0 6px 18px rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .25s}
+  #totop.show{opacity:.95;pointer-events:auto}
+  #totop:hover{opacity:1}
+  footer{text-align:center;color:#41566e;font-size:12px;margin-top:50px;border-top:1px solid #1b2a3d;padding-top:24px}
+  footer a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="hero" id="top">
+  <div class="inner">
+    <a class="back" href="Clock-In - FBLA Nationals 2026.html#jobs">← Back to presentation</a>
+    <div class="kicker">Career Deep Dive · 03 · The Jobs</div>
+    <h1>Network Engineer</h1>
+    <p class="tagline">Route data packets across a shifting grid of tiles to their destination — our deepest, most fully-realized career.</p>
+    <div class="badges">
+      <span class="badge featured">● FEATURED — most complete</span>
+      <span class="badge">Scene: GameDev.unity</span>
+      <span class="badge">Photon-networked</span>
+      <span class="badge">Teaches: packets, routing &amp; timing</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- HOW IT WAS MADE -->
+  <section class="block">
+    <h2><span class="dot made"></span>How it was made</h2>
+    <p class="sub">The networking job is built from six focused scripts in <code>Assets/_Scripts/GamingMap/</code>, layered on Unity physics and Photon PUN 2.</p>
+
+    <div class="card">
+      <h3>The core scripts</h3>
+      <ul>
+        <li><b class="w">Packet.cs</b> — the data packet itself. Inherits <code>MonoBehaviourPun</code> and implements <code>IPunObservable</code>, so its <code>isDelivered</code> state is serialized over the network and every client agrees on which packets have arrived.</li>
+        <li><b class="w">IPdraggable.cs</b> — the first-person pick-up / carry / throw mechanic. A forward <code>Physics.Raycast</code> (5-unit range) finds objects by tag; the held packet is parented to a <code>holdPos</code> transform and made kinematic so physics won't fight the player.</li>
+        <li><b class="w">PacketGoal.cs</b> — the delivery zone. <code>OnCollisionEnter</code> detects an arriving packet and calls <code>ScoreManager.Instance.AddScore(10)</code>.</li>
+        <li><b class="w">Tiles.cs</b> — the living floor. A <code>StartCoroutine(TilesFaded())</code> loop cycles each tile white → yellow (1s warning) → red (collider disabled, impassable) on a random 3–10s interval.</li>
+        <li><b class="w">FadeTiles.cs</b> — discovers all child tiles and manages them as a group.</li>
+        <li><b class="w">Clickable.cs</b> — a raycast utility for toggling objects (currently mostly dormant/commented).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Unity techniques in play</h3>
+      <ul>
+        <li><b class="cyan">Material emission, not shaders</b> — packets glow cyan on spawn and flip to green on delivery by setting <code>_EmissionColor</code> and enabling the <code>_EMISSION</code> keyword on the Standard material. Cheap and readable.</li>
+        <li><b class="cyan">Kinematic + collision-ignore carry</b> — while held, the packet ignores collisions with the player to stop clipping, and rides on a dedicated <code>holdLayer</code>.</li>
+        <li><b class="cyan">Coroutine-driven hazards</b> — the fading tiles are pure coroutine timing, giving a platforming challenge without any animation assets.</li>
+        <li><b class="cyan">Networked state</b> — <code>OnPhotonSerializeView</code> transmits delivery status so a packet delivered on one machine reads as delivered everywhere.</li>
+      </ul>
+    </div>
+
+    <div class="note">
+      <div class="h">Honest engineering notes</div>
+      <p>Delivery is one-directional: once <code>isDelivered</code> is set, the packet's tag flips to <code>Untagged</code> so it can't be grabbed again. There's no round/timer logic inside these scripts — game-end lives elsewhere. <code>Clickable.cs</code> carries three obsolete commented-out versions, and rotation sensitivity is hardcoded to <code>1f</code> rather than exposed in the Inspector.</p>
+    </div>
+  </section>
+
+  <!-- HOW IT'S PLAYED -->
+  <section class="block">
+    <h2><span class="dot play"></span>How it's played</h2>
+    <p class="sub">A delivery loop set on a floor that won't stay put.</p>
+    <div class="steps">
+      <div class="stepc"><h4>Spot a packet</h4><p>Cyan-glowing packets are scattered around the level. Look at one within 5 units and click — a raycast picks it up and it parents to your hands.</p></div>
+      <div class="stepc"><h4>Carry, rotate, or throw</h4><p>Left-click to drop, right-click to throw with force, hold <b class="cyan">R</b> + move the mouse to rotate the packet in place.</p></div>
+      <div class="stepc"><h4>Cross the live grid</h4><p>The floor tiles cycle passable→warning→impassable every 3–10 seconds. Time your route across tiles before they drop out.</p></div>
+      <div class="stepc"><h4>Deliver to the goal</h4><p>Land the packet in the goal zone. It turns green, scores +10, and goes <code>Untagged</code> so it can't be re-delivered.</p></div>
+      <div class="stepc"><h4>Synced for everyone</h4><p>Packet delivery state syncs over Photon, so every player in the room sees the same deliveries happen live.</p></div>
+    </div>
+    <div class="card g">
+      <h3>What it teaches</h3>
+      <ul>
+        <li class="g"><b class="green">Packets</b> — data travels in discrete pieces, carried one at a time.</li>
+        <li class="g"><b class="green">Routing</b> — finding a viable path to the destination.</li>
+        <li class="g"><b class="green">Timing &amp; latency</b> — the network (the tile grid) changes moment to moment.</li>
+        <li class="g"><b class="green">Synchronization</b> — keeping every node in agreement on state.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- HOW IT COULD BE IMPROVED -->
+  <section class="block">
+    <h2><span class="dot imp"></span>How it could be improved</h2>
+    <p class="sub">Concrete next steps, grouped by what they'd buy us.</p>
+
+    <div class="card a">
+      <h3>Bugs &amp; correctness</h3>
+      <ul>
+        <li class="b"><b class="w">Concurrent-delivery double score</b> — if two clients see the same packet enter the goal, <code>OnCollisionEnter</code> fires on both. Gate scoring behind a Photon RPC owned by the master client.</li>
+        <li class="b"><b class="w">Coroutine never stops</b> — <code>TilesFaded()</code>'s <code>while(true)</code> loop has no <code>OnDestroy</code> teardown; stop it when the tile is destroyed.</li>
+        <li class="b"><b class="w">Per-frame RaycastAll</b> — anti-clip checks run every Update while carrying. Debounce to drop/throw moments only.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Gameplay depth</h3>
+      <ul>
+        <li>Difficulty scaling: faster tile cycles and shifting patterns as score climbs.</li>
+        <li>Packet variety: heavy vs. light packets to model data size &amp; congestion.</li>
+        <li>Near-miss feedback: particles/sound when a packet lands just short of the goal.</li>
+        <li>Packet loss events: randomly drop an in-flight packet with a "Packet Lost" notice.</li>
+      </ul>
+    </div>
+    <div class="card g">
+      <h3>Educational value</h3>
+      <ul>
+        <li>HUD tooltips that name the metaphor: "Tiles = network nodes; red = offline/congested," "Goal = destination server."</li>
+        <li>A pre-game briefing and a post-game performance review (delivered / on-time / lost).</li>
+        <li>An optional modal on OSI layers and TCP vs. UDP for judges who want the depth.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Code health</h3>
+      <ul>
+        <li>Delete the dead <code>Clickable.cs</code> variants; keep one.</li>
+        <li>Serialize <code>rotationSensitivity</code> so designers can tune it.</li>
+        <li>Add <code>photonView.IsMine</code> ownership checks so players grab only their own/unowned packets.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TO-DO -->
+  <section class="block">
+    <h2><span class="dot imp"></span>To-do list <span style="font-size:14px;color:var(--muted);font-weight:600">· 10 tasks to take this job further</span></h2>
+    <p class="sub">A concrete backlog distilled from the analysis above.</p>
+    <div class="card">
+      <ol class="todo">
+        <li>Gate goal scoring behind a master-client Photon RPC to fix the duplicate-delivery double-score.</li>
+        <li>Add an <code>OnDestroy</code> handler that stops the <code>TilesFaded()</code> coroutine to prevent leaks.</li>
+        <li>Debounce the per-frame <code>RaycastAll</code> anti-clip check so it only runs on drop/throw.</li>
+        <li>Delete the three dead <code>Clickable.cs</code> variants and keep a single implementation.</li>
+        <li>Serialize <code>rotationSensitivity</code> so designers can tune packet rotation in the Inspector.</li>
+        <li>Add <code>photonView.IsMine</code> ownership checks so players only grab their own / unowned packets.</li>
+        <li>Build a <code>GameManager</code> with a round timer, delivery quota, and win condition.</li>
+        <li>Add HUD tooltips mapping tiles → network nodes and the goal → destination server.</li>
+        <li>Implement random packet-loss events with a "Packet Lost" on-screen notice.</li>
+        <li>Add difficulty scaling — faster tile cycles and new patterns as the score climbs.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="toplink"><a href="#top">↑ Back to top</a></div>
+
+  <footer>
+    Clock-In · FBLA National Leadership Conference 2026 &nbsp;·&nbsp; <a href="Clock-In - FBLA Nationals 2026.html#jobs">← Back to presentation</a><br>
+    Built from real scripts: Packet · IPdraggable · PacketGoal · Tiles · FadeTiles · ScoreManager
+  </footer>
+</div>
+<button id="totop" title="Back to top" aria-label="Back to top">↑</button>
+<script>
+  const tt=document.getElementById('totop');
+  addEventListener('scroll',()=>tt.classList.toggle('show',scrollY>400));
+  tt.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+</script>
+</body>
+</html>

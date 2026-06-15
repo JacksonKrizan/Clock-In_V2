@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clock-In — FBLA Nationals 2026</title>
+<style>
+  :root{
+    --navy:#0e1a2b; --navy2:#16273d; --navy3:#0a1320;
+    --cyan:#2dd4ee; --blue:#38bdf8; --amber:#f5c242;
+    --green:#34d399; --red:#ef6f6f;
+    --light:#f1f5f9; --muted:#9fb3c8; --white:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#05080d;font-family:"Segoe UI",Calibri,system-ui,sans-serif;
+    color:var(--light);overflow:hidden}
+  /* stage scales a fixed 1280x720 slide to the viewport */
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{position:absolute;width:1280px;height:720px;background:var(--navy);
+    padding:48px 56px;display:none;flex-direction:column;
+    transform-origin:center center;overflow:hidden}
+  .slide.active{display:flex;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  /* header */
+  .kicker{color:var(--cyan);font-weight:700;letter-spacing:.12em;font-size:15px;text-transform:uppercase}
+  h1.title{color:var(--white);font-size:40px;font-weight:800;margin-top:4px;line-height:1.05}
+  .head{border-left:7px solid var(--cyan);padding-left:18px;margin-bottom:22px}
+  .head.amber{border-color:var(--amber)} .head.green{border-color:var(--green)}
+  .head.amber .kicker{color:var(--amber)} .head.green .kicker{color:var(--green)}
+
+  /* generic helpers */
+  .grid{display:grid;gap:16px}
+  .card{background:var(--navy2);border-radius:10px;padding:20px 22px;position:relative;overflow:hidden}
+  .card.top::before{content:"";position:absolute;left:0;top:0;height:7px;width:100%;background:var(--cyan)}
+  .card.side::before{content:"";position:absolute;left:0;top:0;width:7px;height:100%;background:var(--cyan)}
+  .card h3{color:var(--white);font-size:17px;margin-bottom:10px}
+  .card li{color:var(--muted);font-size:13px;list-style:none;margin:6px 0;line-height:1.3}
+  .card li::before{content:"▹ ";color:var(--cyan);font-weight:700}
+  .ac-cyan::before{background:var(--cyan)!important} .ac-blue::before{background:var(--blue)!important}
+  .ac-amber::before{background:var(--amber)!important} .ac-green::before{background:var(--green)!important}
+  .ac-red::before{background:var(--red)!important}
+  .t-cyan{color:var(--cyan)} .t-blue{color:var(--blue)} .t-amber{color:var(--amber)}
+  .t-green{color:var(--green)} .t-light{color:var(--light)} .t-muted{color:var(--muted)} .t-white{color:var(--white)}
+  b.cyan{color:var(--cyan)} b.green{color:var(--green)} b.blue{color:var(--blue)} b.amber{color:var(--amber)}
+  p.lead{font-size:18px;line-height:1.45;color:var(--light)}
+  p.body{font-size:15px;line-height:1.5;color:var(--muted)}
+
+  /* footer */
+  .foot{position:absolute;left:56px;right:56px;bottom:20px;display:flex;justify-content:space-between;
+    align-items:center;font-size:11px;color:var(--muted);letter-spacing:.04em}
+  .foot .pg{color:var(--cyan);font-weight:700}
+  .foot b{color:var(--muted)}
+
+  /* progress + hint */
+  #bar{position:fixed;left:0;top:0;height:4px;background:var(--cyan);z-index:50;transition:width .3s}
+  #hint{position:fixed;right:14px;bottom:10px;font-size:11px;color:#41566e;z-index:50;user-select:none}
+
+  /* ---- slide-specific ---- */
+  .title-slide{justify-content:center}
+  .title-slide .big{font-size:84px;font-weight:800;color:var(--white);line-height:1}
+  .bartop{position:absolute;left:0;top:0;width:100%;height:9px;background:var(--cyan)}
+  .barbot{position:absolute;left:0;bottom:0;width:100%;height:9px;background:var(--cyan)}
+  .clock{position:absolute;right:90px;top:150px;width:240px;height:240px;border-radius:50%;
+    background:var(--navy2);display:flex;align-items:center;justify-content:center}
+  .clock .inner{width:150px;height:150px;border-radius:50%;background:var(--navy);
+    display:flex;align-items:center;justify-content:center;color:var(--cyan);font-weight:800;font-size:26px}
+  .rule{height:4px;width:360px;background:var(--cyan);margin:14px 0}
+
+  .toc{grid-template-columns:1fr 1fr;gap:11px 26px}
+  .toc .row{background:var(--navy2);border-radius:8px;padding:12px 16px;display:flex;align-items:center;
+    position:relative;overflow:hidden}
+  .toc .row::before{content:"";position:absolute;left:0;top:0;width:6px;height:100%;background:var(--cyan)}
+  .toc .num{font-size:26px;font-weight:800;color:var(--cyan);width:54px}
+  .toc .ttl{font-size:16px;font-weight:700;color:var(--white)}
+  .toc .sub{font-size:11px;color:var(--muted)}
+
+  .stats{display:flex;flex-direction:column;gap:6px}
+  .stat .v{font-size:40px;font-weight:800;line-height:1}
+  .stat .l{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--light)}
+
+  .jobcard{background:var(--navy2);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;
+    text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease;cursor:pointer}
+  a.jobcard:hover{transform:translateY(-5px);box-shadow:0 10px 26px rgba(0,0,0,.45)}
+  .jobcard .cap{padding:16px;font-weight:800;color:var(--navy);font-size:15px;text-align:center;letter-spacing:.03em}
+  .jobcard .desc{padding:14px 16px;font-size:13px;color:var(--light);line-height:1.35;flex:1}
+  .jobcard .teach{padding:0 16px 6px;font-size:11px;font-weight:700}
+  .jobcard .tag{padding:0 16px 14px;font-size:10px;font-weight:700;letter-spacing:.05em}
+
+  .step{background:var(--navy2);border-radius:8px;display:flex;align-items:center;overflow:hidden;margin-bottom:11px}
+  .step .n{width:66px;align-self:stretch;display:flex;align-items:center;justify-content:center;
+    font-size:26px;font-weight:800;color:var(--navy);background:var(--cyan)}
+  .step .tx{padding:9px 16px}
+  .step .tx .h{font-size:14px;font-weight:700;color:var(--white)}
+  .step .tx .d{font-size:11px;color:var(--muted)}
+
+  .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;align-items:stretch}
+  .flow .f{background:var(--navy2);border-radius:8px;padding:16px;margin:0 7px;position:relative}
+  .flow .f::before{content:"";position:absolute;left:0;top:0;width:100%;height:6px;border-radius:8px 8px 0 0}
+  .flow .arrow{display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:24px;font-weight:700}
+
+  table.sb{width:100%;border-collapse:separate;border-spacing:0 8px}
+  .sbwrap{background:var(--navy2);border-radius:10px;overflow:hidden}
+  .sbwrap .sbhead{background:var(--cyan);color:var(--navy);font-weight:800;font-size:16px;padding:13px 20px;letter-spacing:.05em}
+  .sbwrap .pad{padding:6px 18px 14px}
+  .sb td{background:var(--navy3);padding:12px 14px}
+  .sb .rk{color:var(--cyan);font-weight:800;font-size:20px;width:46px}
+  .sb .nm{font-weight:700;font-size:16px}
+  .sb .sc{color:var(--cyan);font-weight:800;font-size:19px;text-align:right;width:70px}
+
+  .tech .card{padding:16px 18px}
+  .tech .card h3{font-size:18px;margin-bottom:3px}
+  .tech .card .d{font-size:12px;color:var(--muted)}
+
+  .strip{background:var(--navy2);border-radius:9px;padding:14px 20px;position:relative;overflow:hidden;margin-top:14px}
+  .strip::before{content:"";position:absolute;left:0;top:0;width:6px;height:100%;background:var(--blue)}
+  .strip .h{font-size:14px;font-weight:700;color:var(--blue);margin-bottom:4px}
+  .strip p{font-size:14px;line-height:1.4}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="stage">
+
+<!-- 1 TITLE -->
+<section class="slide title-slide active">
+  <div class="bartop"></div><div class="barbot"></div>
+  <div class="clock"><div class="inner">9 to 5</div></div>
+  <div class="kicker">Parallel Play&nbsp;&nbsp;Presents</div>
+  <div class="big">CLOCK-IN</div>
+  <p style="font-size:21px;font-style:italic;color:var(--light);margin-top:14px">Experience real careers through multiplayer mini-games.</p>
+  <div class="rule"></div>
+  <div style="font-size:18px;font-weight:700;color:var(--blue)">FBLA National Leadership Conference 2026</div>
+  <div style="font-size:15px;color:var(--muted);margin-top:4px">Computer Game &amp; Simulation Programming</div>
+  <div style="margin-top:30px">
+    <div class="kicker" style="font-size:12px">Created by</div>
+    <div style="font-size:19px;font-weight:700;margin-top:4px">Jackson Krizan&nbsp;&nbsp;·&nbsp;&nbsp;Blayne Campbell&nbsp;&nbsp;·&nbsp;&nbsp;Jakob Escueta</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:5px">Built in Unity with C#&nbsp; · &nbsp;Photon PUN 2 multiplayer&nbsp; · &nbsp;Firebase cloud</div>
+  </div>
+</section>
+
+<!-- 2 TOC -->
+<section class="slide">
+  <div class="head"><div class="kicker">Roadmap</div><h1 class="title">Table of Contents</h1></div>
+  <div class="grid toc">
+    <div class="row"><div class="num">01</div><div><div class="ttl">Introduction</div><div class="sub">The idea behind Clock-In</div></div></div>
+    <div class="row"><div class="num">06</div><div><div class="ttl">Live Scoreboard</div><div class="sub">Competing in real time</div></div></div>
+    <div class="row"><div class="num">02</div><div><div class="ttl">The Game</div><div class="sub">Themes, goals &amp; core concepts</div></div></div>
+    <div class="row"><div class="num">07</div><div><div class="ttl">Accounts &amp; Leaderboard</div><div class="sub">Cloud progression with Firebase</div></div></div>
+    <div class="row"><div class="num">03</div><div><div class="ttl">The Jobs</div><div class="sub">Four careers, one world</div></div></div>
+    <div class="row"><div class="num">08</div><div><div class="ttl">Tech &amp; Process</div><div class="sub">Our stack, tools &amp; teamwork</div></div></div>
+    <div class="row"><div class="num">04</div><div><div class="ttl">Gameplay Spotlight</div><div class="sub">Inside the networking mini-game</div></div></div>
+    <div class="row"><div class="num">09</div><div><div class="ttl">New Since State</div><div class="sub">How far we've come</div></div></div>
+    <div class="row"><div class="num">05</div><div><div class="ttl">Multiplayer</div><div class="sub">Real-time play with Photon</div></div></div>
+    <div class="row"><div class="num">10</div><div><div class="ttl">What's Next</div><div class="sub">The road ahead</div></div></div>
+  </div>
+  <div class="foot"><span><b>CLOCK-IN</b>&nbsp;&nbsp;|&nbsp;&nbsp;FBLA National Leadership Conference 2026</span><span>ROADMAP</span><span class="pg">2</span></div>
+</section>
+
+<!-- 3 INTRO -->
+<section class="slide">
+  <div class="head"><div class="kicker">01 · Introduction</div><h1 class="title">What is Clock-In?</h1></div>
+  <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:30px">
+    <div>
+      <p class="lead">Clock-In is a 3D multiplayer game that lets players <b class="cyan">try on real-world careers</b> — without leaving the classroom.</p>
+      <p class="body" style="margin-top:16px">Each job is a hands-on mini-game built around what that career actually involves: routing data on a network, repairing a car, working a kitchen, or responding to a fire. Players jump into a shared world, take on a role, and learn by doing.</p>
+      <p class="body" style="margin-top:16px">Our goal: make career exploration <b class="green">fun, social, and interactive</b> for students deciding what they want to be.</p>
+    </div>
+    <div class="card top stats" style="justify-content:center">
+      <div class="stat"><div class="v t-cyan">4</div><div class="l">career mini-games</div></div>
+      <div class="stat"><div class="v t-blue">∞</div><div class="l">players, online together</div></div>
+      <div class="stat"><div class="v t-amber">1</div><div class="l">shared multiplayer world</div></div>
+      <div class="stat"><div class="v t-green">100%</div><div class="l">learn-by-doing</div></div>
+    </div>
+  </div>
+  <div class="foot"><span><b>CLOCK-IN</b>&nbsp;&nbsp;|&nbsp;&nbsp;FBLA National Leadership Conference 2026</span><span>INTRODUCTION</span><span class="pg">3</span></div>
+</section>
+
+<!-- 4 THE GAME -->
+<section class="slide">
+  <div class="head"><div class="kicker">02 · The Game</div><h1 class="title">Themes, Goals &amp; Concepts</h1></div>
+  <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card top"><h3>Themes</h3><ul>
+      <li>Real careers, simulated</li><li>Learning through play</li><li>Cooperative &amp; competitive</li><li>Accessible to any student</li></ul></div>
+    <div class="card top" style="--c:var(--amber)"><h3>Goals</h3><ul class="ac-amber">
+      <li>Visualize what careers look like</li><li>Create a fun interactive experience</li><li>Spark interest in trades &amp; tech</li><li>Make learning feel like a game</li></ul></div>
+    <div class="card top" style="--c:var(--green)"><h3>Key Concepts</h3><ul class="ac-green">
+      <li>Short, focused job tasks</li><li>Career-quest progression</li><li>Live multiplayer scoring</li><li>Persistent cloud accounts</li></ul></div>
+  </div>
+  <div class="strip"><div class="h">The pitch in one line</div>
+    <p style="font-style:italic;color:var(--light)">“What do you want to be when you grow up?”&nbsp; Clock-In turns that question into a game — drop into a job, learn the ropes with friends, climb the leaderboard, and try the next career.</p></div>
+  <div class="foot"><span><b>CLOCK-IN</b>&nbsp;&nbsp;|&nbsp;&nbsp;FBLA National Leadership Conference 2026</span><span>THE GAME</span><span class="pg">4</span></div>
+</section>
+
+<!-- 5 JOBS -->
+<section class="slide" id="jobs">
+  <div class="head"><div class="kicker">03 · The Jobs</div><h1 class="title">Three Careers, One World</h1></div>
+  <p class="body" style="margin:-8px 0 16px;font-style:italic">Click any career for a deep dive — how it was built, how it's played, and where it's going.</p>
+  <div class="grid" style="grid-template-columns:repeat(3,1fr)">
+    <a class="jobcard" href="career-network-engineer.html" target="_blank">
+      <div class="cap" style="background:var(--cyan)">NETWORK ENGINEER</div>
+      <div class="desc">Route data packets across a shifting grid of tiles to their destination.</div>
+      <div class="teach t-cyan">Teaches: packets, routing &amp; timing</div>
+      <div class="tag t-muted">● IN PROGRESS&nbsp;&nbsp;·&nbsp;&nbsp;<span style="color:var(--blue)">Read more →</span></div></a>
+    <a class="jobcard" href="career-auto-mechanic.html" target="_blank">
+      <div class="cap" style="background:var(--amber)">AUTO MECHANIC</div>
+      <div class="desc">Grab, rotate and fit the right parts to repair and rebuild a car.</div>
+      <div class="teach t-amber">Teaches: assembly &amp; precision work</div>
+      <div class="tag t-muted">● IN PROGRESS&nbsp;&nbsp;·&nbsp;&nbsp;<span style="color:var(--amber)">Read more →</span></div></a>
+    <a class="jobcard" href="career-firefighter.html" target="_blank">
+      <div class="cap" style="background:var(--red)">FIREFIGHTER</div>
+      <div class="desc">Operate gear and respond to emergencies to save lives.</div>
+      <div class="teach" style="color:var(--red)">Teaches: emergency response</div>
+      <div class="tag t-muted">● IN PROGRESS&nbsp;&nbsp;·&nbsp;&nbsp;<span style="color:var(--red)">Read more →</span></div></a>
+  </div>
+  <div class="foot"><span><b>CLOCK-IN</b>&nbsp;&nbsp;|&nbsp;&nbsp;FBLA National Leadership Conference 2026</span><span>THE JOBS</span><span class="pg">5</span></div>
+</section>
+
+<!-- 6 SPOTLIGHT -->
+<section class="slide">
+  <div class="head"><div class="kicker">04 · Gameplay Spotlight</div><h1 class="title">Inside the Networking Mini-Game</h1></div>
+  <p class="body" style="font-style:italic;margin-bottom:14px">Our deepest job — it turns abstract networking ideas into something you can run across.</p>
+  <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:24px">
+    <div>
+      <div class="step"><div class="n">1</div><div class="tx"><div class="h">PICK UP THE PACKET</div><div class="d">Cyan-glowing packets appear in the level — grab one to carry it.</div></div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><div class="h">CROSS THE LIVE GRID</div><div class="d">The floor is tiles that fade in and out on 3–10s cycles. Time your route.</div></div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><div class="h">DELIVER TO THE GOAL</div><div class="d">Reach the goal zone — the packet turns green and you score points.</div></div></div>
+      <div class="step"><div class="n">4</div><div class="tx"><div class="h">SYNCED FOR EVERYONE</div><div class="d">Packet state syncs over Photon, so every player sees the same delivery live.</div></div></div>
+    </div>
+    <div class="card top" style="--c:var(--green)">
+      <h3 class="t-green" style="font-size:14px">WHAT IT TEACHES</h3>
+      <p class="body" style="margin:8px 0"><b class="cyan">Packets</b> — data travels in pieces</p>
+      <p class="body" style="margin:8px 0"><b class="cyan">Routing</b> — finding a path to the destination</p>
+      <p class="body" style="margin:8px 0"><b class="cyan">Timing &amp; latency</b> — networks change moment to moment</p>
+      <p class="body" style="margin:8px 0"><b class="cyan">Synchronization</b> — keeping every node in agreement</p>
+      <p style="font-size:12px;color:var(--light);font-weight:700;margin-top:14px">Built from real scripts:</p>
+      <p style="font-size:12px;color:var(--muted);font-style:italic">Packet · PacketGoal · Tiles · ScoreManager</p>
+    </div>
+  </div>
+  <div class="foot"><span><b>CLOCK-IN</b>&nbsp;&nbsp;|&nbsp;&nbsp;FBLA National Leadership Conference 2026</span><span>GAMEPLAY SPOTLIGHT</span><span class="pg">6</span></div>
+</section>
+
+<!-- 7 MULTIPLAYER -->
+<section class="slide">
+  <div class="head"><div class="kicker">05 · Multiplayer</div><h1 class="title">Playing Together with Photon PUN 2</h1></div>
+  <p class="lead" style="font-size:16px;margin-bottom:18px">Clock-In is multiplayer to its core. Players connect to a shared lobby, join a room, and drop into the same job together — in real time.</p>
+  <div class="flow">
+    <div class="f" style="--c:var(--cyan)"><div style="color:var(--cyan);font-weight:800;font-size:15px">CONNECT</div><p class="body" style="margin-top:8px;font-size:12px">Players join the Photon master server and lobby</p></div>
+    <div class="arrow">›</div>
+    <div class="f"><div style="color:var(--blue);font-weight:800;font-size:15px">ROOM</div><p class="body" style="margin-top:8px;font-size:12px">Host creates or joins a room; everyone sees the player list</p></div>
+    <div class="arrow">›</div>
+    <div class="f"><div style="color:var(--amber);font-weight:800;font-size:15px">LAUNCH</div><p class="body" style="margin-top:8px;font-size:12px">Host picks a job and loads the level for the whole room</p></div>
+  </div>
+  <div class="flow" style="margin-top:14px;grid-template-columns:repeat(5,1fr)">
+    <div class="f"><div style="color:var(--green);font-weight:800;font-size:15px">SPAWN</div><p class="body" style="margin-top:8px;font-size:12px">Each player spawns the right character for that scene</p></div>
+    <div class="arrow">›</div>
+    <div class="f"><div style="color:var(--cyan);font-weight:800;font-size:15px">PLAY</div><p class="body" style="margin-top:8px;font-size:12px">Movement &amp; scores sync live across all players</p></div>
+    <div></div><div></div>
+  </div>
+  <div class="strip"><p><b class="blue">Under the hood:</b> a persistent RoomManager keeps players in sync across scene loads, a networked PlayerManager spawns the correct character per job, and host-controlled level loading keeps the whole room on the same map.</p></div>
+  <div class="foot"><span><b>CLOCK-IN</b>&nbsp;&nbsp;|&nbsp;&nbsp;FBLA National Leadership Conference 2026</span><span>MULTIPLAYER</span><span class="pg">7</span></div>
+</section>
+
+<!-- 8 SCOREBOARD -->
+<section class="slide">
+  <div class="head"><div class="kicker">06 · Live Scoreboard</div><h1 class="title">Competing in Real Time</h1></div>
+  <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:30px">
+    <div>
+      <p class="lead" style="font-size:16px;margin-bottom:14px">Every delivery, repair, and task earns points. A live scoreboard shows where everyone stands — instantly, for all players in the room.</p>
+      <div class="card side" style="margin-bottom:9px"><div style="font-size:13px;font-weight:700;color:var(--white)">Backend-agnostic core</div><div style="font-size:11px;color:var(--muted)">A single ScoreManager owns the score and fires events — gameplay never talks to the network directly.</div></div>
+      <div class="card side" style="margin-bottom:9px"><div style="font-size:13px;font-weight:700;color:var(--white)">Synced over Photon</div><div style="font-size:11px;color:var(--muted)">ScoreNetworkSync pushes each score into Photon properties, so all players see updates live.</div></div>
+      <div class="card side"><div style="font-size:13px;font-weight:700;color:var(--white)">Toggle anytime</div><div style="font-size:11px;color:var(--muted)">Pop the full scoreboard, sorted highest-first, mid-match — plus a clean always-on HUD.</div></div>
+    </div>
+    <div class="sbwrap">
+      <div class="sbhead">LIVE SCOREBOARD</div>
+      <div class="pad"><table class="sb">
+        <tr><td class="rk">1</td><td class="nm t-amber">Jackson</td><td class="sc">120</td></tr>
+        <tr><td class="rk">2</td><td class="nm">Blayne</td><td class="sc">90</td></tr>
+        <tr><td class="rk">3</td><td class="nm">Jakob</td><td class="sc">80</td></tr>
+        <tr><td class="rk">4</td><td class="nm t-muted">Guest_417</td><td class="sc">40</td></tr>
+      </table></div>
+    </div>
+  </div>
+  <div class="foot"><span><b>CLOCK-IN</b>&nbsp;&nbsp;|&nbsp;&nbsp;FBLA National Leadership Conference 2026</span><span>LIVE SCOREBOARD</span><span class="pg">8</span></div>
+</section>
+
+<!-- 9 ACCOUNTS -->
+<section class="slide">
+  <div class="head green"><div class="kicker">07 · Accounts &amp; Leaderboard</div><h1 class="title">Cloud Progression with Firebase</h1></div>
+  <p class="lead" style="font-size:16px;margin-bottom:18px"><b class="green">New for Nationals:</b> players can create an account, sign in, and have their best scores saved to a global leaderboard in the cloud.</p>
+  <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card top" style="--c:var(--green)"><h3 class="t-green">ACCOUNTS</h3><ul class="ac-green">
+      <li>Sign up with email &amp; display name</li><li>Secure sign-in via Firebase Auth</li><li>Continue as Guest — no account needed</li><li>Session persists across scenes</li><li>One-tap sign-out</li></ul></div>
+    <div class="card top"><h3 class="t-cyan">GLOBAL LEADERBOARD</h3><ul>
+      <li>Personal-best scores saved to cloud</li><li>Firebase Realtime Database</li><li>Ranked top-N global standings</li><li>Guests stay private (never written)</li><li>Tracks progress across sessions</li></ul></div>
+    <div class="card top" style="--c:var(--blue)"><h3 class="t-blue">WHY IT MATTERS</h3><ul class="ac-blue">
+      <li>Turns one match into a season</li><li>Rewards coming back &amp; improving</li><li>Casual OR committed — your choice</li><li>Shows real backend engineering</li><li>Scales to any number of players</li></ul></div>
+  </div>
+  <div class="foot"><span><b>CLOCK-IN</b>&nbsp;&nbsp;|&nbsp;&nbsp;FBLA National Leadership Conference 2026</span><span>ACCOUNTS &amp; LEADERBOARD</span><span class="pg">9</span></div>
+</section>
+
+<!-- 10 TECH -->
+<section class="slide">
+  <div class="head"><div class="kicker">08 · Technology</div><h1 class="title">Our Tech Stack</h1></div>
+  <div class="grid tech" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card side"><h3>UNITY 2022.3.22f1</h3><div class="d">3D game engine &amp; editor</div></div>
+    <div class="card side" style="--c:var(--blue)"><h3>C#</h3><div class="d">All gameplay &amp; systems code</div></div>
+    <div class="card side" style="--c:var(--amber)"><h3>PHOTON PUN 2</h3><div class="d">Real-time multiplayer networking</div></div>
+    <div class="card side" style="--c:var(--green)"><h3>FIREBASE</h3><div class="d">Cloud auth &amp; leaderboard database</div></div>
+    <div class="card side"><h3>TEXTMESH PRO</h3><div class="d">Crisp in-game UI &amp; text</div></div>
+    <div class="card side" style="--c:var(--blue)"><h3>GIT + GITHUB</h3><div class="d">Version control &amp; team collaboration</div></div>
+  </div>
+  <div class="strip" style="margin-top:18px"><p><b class="cyan">Architecture note:</b> systems are decoupled — the scoring core has no idea whether it's talking to Photon or Firebase, so we can extend or swap pieces without breaking gameplay.</p></div>
+  <div class="foot"><span><b>CLOCK-IN</b>&nbsp;&nbsp;|&nbsp;&nbsp;FBLA National Leadership Conference 2026</span><span>TECHNOLOGY</span><span class="pg">10</span></div>
+</section>
+
+<!-- 11 PROCESS -->
+<section class="slide">
+  <div class="head"><div class="kicker">08 · Process</div><h1 class="title">How We Built It</h1></div>
+  <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card top"><h3>JACKSON KRIZAN</h3><ul>
+      <li>Networking mini-game</li><li>Scoring &amp; multiplayer sync</li><li>Firebase accounts &amp; leaderboard</li></ul></div>
+    <div class="card top" style="--c:var(--amber)"><h3>BLAYNE CAMPBELL</h3><ul class="ac-amber">
+      <li>Game design &amp; concept</li><li>Job themes &amp; content</li><li>Playtesting &amp; feedback</li></ul></div>
+    <div class="card top" style="--c:var(--green)"><h3>JAKOB ESCUETA</h3><ul class="ac-green">
+      <li>Programming support</li><li>User interface &amp; menus</li><li>Assets &amp; integration</li></ul></div>
+  </div>
+  <div class="strip"><div class="h">Our workflow</div>
+    <p style="color:var(--light)">We work in GitHub branches and pull requests — each feature is built in isolation, reviewed, then merged. Tickets track every task. Unity lets us iterate on gameplay fast, while clean code organization (separate folders per job, shared core systems) keeps a four-job game manageable for a three-person team.</p></div>
+  <div class="foot"><span><b>CLOCK-IN</b>&nbsp;&nbsp;|&nbsp;&nbsp;FBLA National Leadership Conference 2026</span><span>PROCESS</span><span class="pg">11</span></div>
+</section>
+
+<!-- 12 NEW SINCE STATE -->
+<section class="slide">
+  <div class="head"><div class="kicker">09 · Growth</div><h1 class="title">What's New Since State</h1></div>
+  <p class="body" style="font-style:italic;margin-bottom:16px">We didn't just polish — we added entire systems that take Clock-In from a demo to a real, replayable game.</p>
+  <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card top" style="--c:var(--green)"><div style="font-weight:700;color:var(--white)"><span class="t-green">✦</span> CLOUD ACCOUNTS</div><div style="font-size:12px;color:var(--muted);margin-top:5px">Brand-new Firebase sign-up / sign-in with guest mode</div></div>
+    <div class="card top"><div style="font-weight:700;color:var(--white)"><span class="t-cyan">✦</span> GLOBAL LEADERBOARD</div><div style="font-size:12px;color:var(--muted);margin-top:5px">Persistent personal bests ranked across all players</div></div>
+    <div class="card top" style="--c:var(--blue)"><div style="font-weight:700;color:var(--white)"><span class="t-blue">✦</span> LIVE MULTIPLAYER SCORING</div><div style="font-size:12px;color:var(--muted);margin-top:5px">Real-time scoreboard synced over Photon</div></div>
+    <div class="card top" style="--c:var(--amber)"><div style="font-weight:700;color:var(--white)"><span class="t-amber">✦</span> NETWORKING MINI-GAME</div><div style="font-size:12px;color:var(--muted);margin-top:5px">Full packet-delivery game with dynamic tiles</div></div>
+    <div class="card top" style="--c:var(--blue)"><div style="font-weight:700;color:var(--white)"><span class="t-blue">✦</span> MATURE MULTIPLAYER</div><div style="font-size:12px;color:var(--muted);margin-top:5px">Robust rooms, spawning &amp; scene handling</div></div>
+    <div class="card top"><div style="font-weight:700;color:var(--white)"><span class="t-cyan">✦</span> MORE POLISH</div><div style="font-size:12px;color:var(--muted);margin-top:5px">Visual feedback, HUD, cleaner architecture</div></div>
+  </div>
+  <div class="foot"><span><b>CLOCK-IN</b>&nbsp;&nbsp;|&nbsp;&nbsp;FBLA National Leadership Conference 2026</span><span>GROWTH</span><span class="pg">12</span></div>
+</section>
+
+<!-- 13 ROADMAP -->
+<section class="slide">
+  <div class="head amber"><div class="kicker">10 · What's Next</div><h1 class="title">The Road Ahead</h1></div>
+  <div class="grid" style="grid-template-columns:1fr 1fr">
+    <div class="card side" style="--c:var(--amber)"><div style="font-weight:700;color:var(--white)">FINISH EVERY JOB</div><div style="font-size:12px;color:var(--muted)">Complete the Chef and Firefighter mini-games to full depth.</div></div>
+    <div class="card side"><div style="font-weight:700;color:var(--white)">CAREER QUEST MODE</div><div style="font-size:12px;color:var(--muted)">A progression path that guides players through all four jobs.</div></div>
+    <div class="card side" style="--c:var(--green)"><div style="font-weight:700;color:var(--white)">MORE CAREERS</div><div style="font-size:12px;color:var(--muted)">Our framework makes adding the next job straightforward.</div></div>
+    <div class="card side" style="--c:var(--blue)"><div style="font-weight:700;color:var(--white)">DEEPER LEARNING</div><div style="font-size:12px;color:var(--muted)">In-game tips that explain the real concept behind each task.</div></div>
+    <div class="card side"><div style="font-weight:700;color:var(--white)">FRIENDS &amp; PARTIES</div><div style="font-size:12px;color:var(--muted)">Invite friends directly and form persistent teams.</div></div>
+    <div class="card side" style="--c:var(--green)"><div style="font-weight:700;color:var(--white)">ACCESSIBILITY &amp; POLISH</div><div style="font-size:12px;color:var(--muted)">Tutorials, settings, and quality-of-life across the board.</div></div>
+  </div>
+  <div class="foot"><span><b>CLOCK-IN</b>&nbsp;&nbsp;|&nbsp;&nbsp;FBLA National Leadership Conference 2026</span><span>WHAT'S NEXT</span><span class="pg">13</span></div>
+</section>
+
+<!-- 14 THANK YOU -->
+<section class="slide title-slide">
+  <div class="bartop"></div><div class="barbot"></div>
+  <div style="font-size:62px;font-weight:800;color:var(--white)">Thank You</div>
+  <p style="font-size:20px;font-style:italic;color:var(--cyan);margin-top:14px">We'd love to answer your questions about Clock-In.</p>
+  <div class="rule"></div>
+  <div style="font-size:16px"><b class="blue">CLOCK-IN</b> <span class="t-muted">· Parallel Play</span></div>
+  <div style="font-size:19px;font-weight:700;margin-top:8px">Jackson Krizan&nbsp;&nbsp;·&nbsp;&nbsp;Blayne Campbell&nbsp;&nbsp;·&nbsp;&nbsp;Jakob Escueta</div>
+  <div style="font-size:13px;color:var(--muted);margin-top:6px">FBLA National Leadership Conference 2026&nbsp; · &nbsp;Computer Game &amp; Simulation Programming</div>
+</section>
+
+</div>
+<div id="hint">← → / Space to navigate&nbsp; ·&nbsp; F fullscreen</div>
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  let i=0;
+  const bar=document.getElementById('bar');
+  function scale(){
+    const s=Math.min(innerWidth/1280, innerHeight/720);
+    slides.forEach(sl=>sl.style.transform=`scale(${s})`);
+  }
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    bar.style.width=((i+1)/slides.length*100)+'%';
+  }
+  addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){show(i+1);e.preventDefault();}
+    else if(['ArrowLeft','PageUp'].includes(e.key)){show(i-1);e.preventDefault();}
+    else if(e.key==='Home'){show(0);}
+    else if(e.key==='End'){show(slides.length-1);}
+    else if(e.key.toLowerCase()==='f'){
+      if(!document.fullscreenElement)document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+  });
+  addEventListener('click',e=>{ if(e.target.closest('a')) return; if(e.clientX < innerWidth*0.25) show(i-1); else show(i+1); });
+  addEventListener('resize',scale);
+  function initFromHash(){
+    const h=location.hash.replace('#','');
+    if(h){ const el=document.getElementById(h); if(el){ const idx=slides.indexOf(el); if(idx>=0){ show(idx); return; } } }
+    show(0);
+  }
+  addEventListener('hashchange',initFromHash);
+  scale(); initFromHash();
+</script>
+</body>
+</html>
