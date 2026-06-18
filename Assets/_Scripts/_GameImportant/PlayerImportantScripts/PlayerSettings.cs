@@ -12,18 +12,28 @@ public class PlayerSettings : MonoBehaviourPunCallbacks
     [SerializeField] GameObject howToPlayMenu;
     public bool isSettingsMenuOpen = false;
 
-    public override void OnLeftRoom()
+    // in-game Leave button (RoomManager loads the menu after the leave)
+    public void LeaveGame()
     {
         PhotonNetwork.LeaveRoom();
-        SceneManager.LoadScene(0);
     }
 
     void Update()
     {
+        // A-003: Escape quits
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            OpenMenuAndUnlockCursor();
+            QuitGame();
         }
+    }
+
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // Quit() no-ops in Editor
+#else
+        Application.Quit();
+#endif
     }
 
     public void OpenMenuAndUnlockCursor()

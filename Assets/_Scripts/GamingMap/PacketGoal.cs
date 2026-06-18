@@ -18,8 +18,8 @@ public class PacketGoal : MonoBehaviour
             // this is the first concrete caller. NOTE: in multiplayer OnCollisionEnter
             // fires on every client, so you may later want to gate this to the packet's
             // owner so a single delivery isn't counted on each client.
-            if (ScoreManager.Instance != null)
-                ScoreManager.Instance.AddScore(pointsPerDelivery);
+            //if (ScoreManager.Instance != null)
+            //    ScoreManager.Instance.AddScore(pointsPerDelivery);
         }
     }
 }

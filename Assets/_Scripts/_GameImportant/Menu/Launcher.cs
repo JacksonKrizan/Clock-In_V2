@@ -37,12 +37,25 @@ public class Launcher : MonoBehaviourPunCallbacks
             int index = Mathf.Clamp(mapNumber - 1, 0, mapSelected.Count - 1);
             mapSelectedText.text = mapSelected[index] + " Selected Map" + mapNumber;
         }
-        Debug.Log(mapNumber + "Map Number Selected.");
+
+        // A-003: Escape quits
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ExitGame();
+        }
     }
     void Start()
     {
-        Debug.Log("Connecting to Master");
-        PhotonNetwork.ConnectUsingSettings();
+        // rejoin lobby if already connected, else connect
+        if (PhotonNetwork.IsConnected)
+        {
+            if (PhotonNetwork.InLobby) OnJoinedLobby();
+            else PhotonNetwork.JoinLobby();
+        }
+        else
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
     }
     /*public void OnMapNumberInputValueChanged()
     {
@@ -65,8 +78,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         MenuManager.Instance.OpenMenu("title");
         Debug.Log("Joined Lobby");
-        // Only assign a random fallback name if nothing has set one yet. This preserves
-        // the display name chosen by AuthManager (sign-in) or PlayerNameManager (guest).
+        // fallback name if none set
         if (string.IsNullOrEmpty(PhotonNetwork.NickName))
         {
             PhotonNetwork.NickName = "Player" + Random.Range(0, 1000).ToString("0000");
@@ -86,7 +98,6 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-
         MenuManager.Instance.OpenMenu("room");
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
 
@@ -171,7 +182,11 @@ public class Launcher : MonoBehaviourPunCallbacks
     }
     public void ExitGame()
     {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // Quit() no-ops in Editor
+#else
         Application.Quit();
+#endif
     }
     public void AreYouSureExit()
     {
