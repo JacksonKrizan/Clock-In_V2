@@ -5,12 +5,12 @@ using UnityEngine;
 public class Tiles : MonoBehaviour
 {
     public List<GameObject> targets = new List<GameObject>();
-    public Color glowColor = Color.cyan;
+    //public Color glowColor = Color.cyan;
     public BoxCollider TileBoxCollider;
     public Material redTileMaterial;
     public Material yellowTileMaterial;
     public Material whiteTileMaterial;
-    public float yellowTileDuration = 1f;
+    public float yellowTileDuration = 3f;
     
 
     public Renderer TileRenderer;
@@ -32,7 +32,7 @@ public class Tiles : MonoBehaviour
         {
             while (true)
             {
-                speed = UnityEngine.Random.Range(3f, 10f);
+                speed = UnityEngine.Random.Range(5f, 10f);
 
                 yield return new WaitForSeconds(speed);
                 TileRenderer.material = yellowTileMaterial;
@@ -40,7 +40,7 @@ public class Tiles : MonoBehaviour
                 TileBoxCollider.enabled = !TileBoxCollider.enabled;
                 TileRenderer.material = redTileMaterial;
 
-                yield return new WaitForSeconds(speed);
+                yield return new WaitForSeconds(speed / 2f);
                 TileBoxCollider.enabled = !TileBoxCollider.enabled;
                 TileRenderer.material = whiteTileMaterial;
 
