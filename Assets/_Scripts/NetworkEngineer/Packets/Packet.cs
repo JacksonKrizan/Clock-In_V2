@@ -10,11 +10,16 @@ public class Packet : MonoBehaviourPun, IPunObservable
     private Renderer rend;
     private Rigidbody rb;
     private bool isDelivered = false;
+    PacketSpawner packetSpawner;
 
     void Awake()
     {
         rend = GetComponent<Renderer>();
         rb = GetComponent<Rigidbody>();
+    }
+    public void Update()
+    {
+        FallOutOfBoundsCheck();
     }
 
     void Start()
@@ -70,6 +75,15 @@ public class Packet : MonoBehaviourPun, IPunObservable
                 }
                 gameObject.tag = "Untagged";
             }
+        }
+    }
+
+    void FallOutOfBoundsCheck()
+    {
+        if (transform.position.y < -10f)
+        {
+            //packetSpawner.currentPacketCount--;
+            Destroy(gameObject);
         }
     }
 }
