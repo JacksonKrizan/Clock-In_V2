@@ -36,6 +36,12 @@ public class RouteManager : MonoBehaviour
     public bool aimFromScreenCenter = true; // first-person: aim with the crosshair
     public float reach = 100f;
 
+    [Header("HUD")]
+    [SerializeField] GameObject hudPanel; // your shared HUD panel; keep it INACTIVE in the scene
+
+    // shown in the shared HUD's how-to box
+    const string HowTo = "Connect the <color=#3399FF>BLUE start</color> to the <color=#FF4D4D>RED destination</color> using the fewest connections.";
+
     class Link { public RouteNode a, b; public LineRenderer line; }
 
     readonly List<Link> links = new List<Link>();
@@ -46,6 +52,7 @@ public class RouteManager : MonoBehaviour
     RouteNode selected;
     Vector3 selectedBaseScale;
     bool busy;          // blocks input during the round transition
+    bool started;       // true once the player actually starts playing
     bool warnedNoCamera;
 
     void Start()
@@ -64,8 +71,20 @@ public class RouteManager : MonoBehaviour
             return;
         }
 
-        if (ScoreManager.Instance != null) ScoreManager.Instance.AddScore(startingPoints);
+        // set up the board so it looks ready, but don't score or show the HUD yet
         StartNewRound();
+    }
+
+    // Called the first time the player interacts (or call it yourself from a
+    // trigger/button). Turns on the HUD and grants the starting points - once.
+    public void BeginGame()
+    {
+        if (started) return;
+        started = true;
+
+        if (hudPanel != null) hudPanel.SetActive(true);
+        if (ScoreManager.Instance != null) ScoreManager.Instance.AddScore(startingPoints);
+        if (MiniGameHUD.Instance != null) MiniGameHUD.Instance.SetHowTo(HowTo);
     }
 
     void Update()
@@ -101,6 +120,8 @@ public class RouteManager : MonoBehaviour
 
     void HandleNodeClick(RouteNode node)
     {
+        if (!started) BeginGame(); // first node click starts the game
+
         if (selected == null) { Select(node); return; }
         if (node == selected) { ClearSelection(); return; }
 
@@ -115,7 +136,8 @@ public class RouteManager : MonoBehaviour
             float dist = Vector3.Distance(selected.transform.position, node.transform.position);
             if (dist > maxCableLength)
             {
-                Debug.Log("[RouteManager] Too far - route through a closer node.");
+                if (MiniGameHUD.Instance != null)
+                    MiniGameHUD.Instance.ShowResponse("<color=#FFD24D>Too long - route through a closer node</color>");
                 ClearSelection();
                 return;
             }
@@ -150,7 +172,8 @@ public class RouteManager : MonoBehaviour
         busy = true;
         if (ScoreManager.Instance != null) ScoreManager.Instance.AddScore(completionReward);
         foreach (Link l in links) l.line.startColor = l.line.endColor = completeColor;
-        Debug.Log($"Route complete! +{completionReward}");
+        if (MiniGameHUD.Instance != null)
+            MiniGameHUD.Instance.ShowResponse($"<color=#5CFF5C>Route complete!  +{completionReward}</color>", nextRoundDelay + 1.5f);
         StartCoroutine(NextRoundAfter(nextRoundDelay));
     }
 
