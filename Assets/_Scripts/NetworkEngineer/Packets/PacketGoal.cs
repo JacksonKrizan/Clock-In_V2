@@ -8,16 +8,14 @@ public class PacketGoal : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // Check if the object entering the trigger is a Packet
-        if (collision.gameObject.CompareTag(packetTag))
-        {
-            // OnCollisionEnter fires on every client; only the packet owner awards,
-            // so one delivery counts once (credited to that owner's player).
-            PhotonView packetPV = collision.gameObject.GetComponent<PhotonView>();
-            if (packetPV != null && packetPV.IsMine && ScoreManager.Instance != null)
-            {
-                ScoreManager.Instance.AddScore(pointsPerDelivery);
-            }
-        }
+        if (!collision.gameObject.CompareTag(packetTag)) return;
+
+        // Packets are spawned locally per client, so this delivery only happens on
+        // this client - no IsMine gate needed. Score once, on the first delivery.
+        Packet packet = collision.gameObject.GetComponent<Packet>();
+        bool fresh = packet == null || packet.OnDelivered();
+
+        if (fresh && ScoreManager.Instance != null)
+            ScoreManager.Instance.AddScore(pointsPerDelivery);
     }
 }

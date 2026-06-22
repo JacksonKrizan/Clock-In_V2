@@ -83,6 +83,10 @@ public class IPdraggable : MonoBehaviour
             heldObjRb.transform.parent = holdPos.transform; 
             heldObj.layer = LayerNumber;
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), true);
+
+            // if it's a packet, let it pop the HUD up
+            Packet packet = pickUpObj.GetComponent<Packet>();
+            if (packet != null) packet.OnPickedUp();
         }
     }
     void DropObject()

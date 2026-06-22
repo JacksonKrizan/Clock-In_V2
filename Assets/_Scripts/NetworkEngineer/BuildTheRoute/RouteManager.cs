@@ -36,9 +36,6 @@ public class RouteManager : MonoBehaviour
     public bool aimFromScreenCenter = true; // first-person: aim with the crosshair
     public float reach = 100f;
 
-    [Header("HUD")]
-    [SerializeField] GameObject hudPanel; // your shared HUD panel; keep it INACTIVE in the scene
-
     // shown in the shared HUD's how-to box
     const string HowTo = "Connect the <color=#3399FF>BLUE start</color> to the <color=#FF4D4D>RED destination</color> using the fewest connections.";
 
@@ -82,9 +79,8 @@ public class RouteManager : MonoBehaviour
         if (started) return;
         started = true;
 
-        if (hudPanel != null) hudPanel.SetActive(true);
         if (ScoreManager.Instance != null) ScoreManager.Instance.AddScore(startingPoints);
-        if (MiniGameHUD.Instance != null) MiniGameHUD.Instance.SetHowTo(HowTo);
+        if (MiniGameHUD.Instance != null) MiniGameHUD.Instance.SetHowTo(HowTo); // also shows the HUD
     }
 
     void Update()

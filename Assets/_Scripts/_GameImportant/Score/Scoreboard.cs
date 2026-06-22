@@ -15,6 +15,7 @@ public class Scoreboard : MonoBehaviourPunCallbacks
     GameObject panel;
     TMP_Text text;
     bool visible;
+    public bool isVisible;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void Bootstrap()
@@ -46,6 +47,15 @@ public class Scoreboard : MonoBehaviourPunCallbacks
 
     void Update()
     {
+        if(visible == true)
+        {
+            isVisible = true;
+        }
+        else
+        {
+            isVisible = false;
+        }
+
         // T toggles the board (only in a room, so it can't clash with menu text input)
         if (Input.GetKeyDown(KeyCode.T) && PhotonNetwork.InRoom)
             SetVisible(!visible);

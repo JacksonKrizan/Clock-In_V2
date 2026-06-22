@@ -1743,10 +1743,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc2daf9a026d53240baee713a4bbc673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hudPanel: {fileID: 0}
   howToText: {fileID: 4944221604546364929}
   responseText: {fileID: 1860280762952261765}
   scoreText: {fileID: 1957841953743249713}
   responseSeconds: 2
+  hideAfterSeconds: 15
 --- !u!1 &3255570707063373634
 GameObject:
   m_ObjectHideFlags: 0

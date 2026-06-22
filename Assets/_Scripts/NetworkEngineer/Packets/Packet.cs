@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 
@@ -16,6 +17,7 @@ public class Packet : MonoBehaviourPun, IPunObservable
     {
         rend = GetComponent<Renderer>();
         rb = GetComponent<Rigidbody>();
+        packetSpawner = FindObjectOfType<PacketSpawner>();
     }
     public void Update()
     {
@@ -82,8 +84,42 @@ public class Packet : MonoBehaviourPun, IPunObservable
     {
         if (transform.position.y < -10f)
         {
-            //packetSpawner.currentPacketCount--;
+            if (packetSpawner != null) packetSpawner.currentPacketCount--;
             Destroy(gameObject);
         }
+    }
+
+    // called by IPdraggable when the player picks this packet up
+    public void OnPickedUp()
+    {
+        if (packetSpawner != null) packetSpawner.ShowHud();
+        if (MiniGameHUD.Instance != null) MiniGameHUD.Instance.ShowResponse("Carry the packet to the goal");
+    }
+
+    // called by PacketGoal when the packet reaches the destination.
+    // returns true only the first time (so the goal scores it once).
+    public bool OnDelivered()
+    {
+        if (isDelivered) return false;
+        isDelivered = true;
+
+        if (rend != null)
+        {
+            rend.material.color = Color.green;
+            rend.material.SetColor("_EmissionColor", Color.green * 0.8f);
+        }
+        gameObject.tag = "Untagged";
+
+        if (MiniGameHUD.Instance != null) MiniGameHUD.Instance.ShowResponse("Delivered!");
+        StartCoroutine(DespawnAfter(3f));
+        return true;
+    }
+
+    IEnumerator DespawnAfter(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        // lower the count so the spawner makes a new one
+        if (packetSpawner != null) packetSpawner.currentPacketCount--;
+        Destroy(gameObject);
     }
 }
