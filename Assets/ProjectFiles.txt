@@ -1,0 +1,65 @@
+Clock-In - where stuff lives
+=============================
+
+Quick notes on what each folder in Assets is for, so you don't have to dig around.
+
+
+SCENES
+------
+_Scenes/        the real game scenes:
+                  _Menu        - main menu / lobby
+                  GameDev      - network engineer world
+                  AutoShop     - auto mechanic world
+                  Firemap      - firefighter world
+                  Chef         - old kitchen world (not worked on anymore)
+                  TestFeild    - scratch scene for testing
+                (the other .unity files around the project are demo scenes that
+                 came with downloaded asset packs - ignore them)
+
+
+OUR CODE
+--------
+_Scripts/       all the code we wrote. broken down by area:
+
+  _GameImportant/        core stuff used everywhere
+    Menu/                main menu, lobby, room list, joining rooms
+    Menu/options/        the map/job picker buttons
+    PlayerImportantScripts/  player movement, camera, name tag, spawning
+    Score/               ScoreManager (points) and Scoreboard (T to view)
+    UI/                  MiniGameHUD - the shared mini-game ui panel
+
+  NetworkEngineer/       the network engineer world
+    Packets/             packet delivery game (tiles, packets, goal)
+    BuildTheRoute/       build the route game (nodes + cables)
+
+  AutoMap/               auto mechanic world (car parts, pickup)
+  Kitchen/               old chef world (not used)
+  _Editor/               editor-only helper (loads menu first when you hit play)
+
+
+PHOTON (multiplayer)
+--------------------
+Photon/             the Photon PUN networking plugin
+PhotonMenuPrefabs/  networked prefabs (player manager, etc)
+Resources/          prefabs Photon spawns at runtime live here mosly player prefabs
+
+
+ART / LEVEL PIECES (mostly downloaded packs)
+--------------------------------------------
+MapBuilding/        office and server room pieces for building the maps
+CarMapPrefabs/      cars and garage stuff for the auto shop
+kitchen assets/     food + firefighter models
+MapPrefabsRandoms/  skyboxes, icons, extra bits
+Materials/          materials and textures
+UI_Prefabs/         button and menu graphics
+SpawnPoints/        spawn point prefabs
+
+
+OTHER
+-----
+docs/               the project / presentation html
+ExternalDependencyManager/  tool Photon needs, leave it alone
+
+
+note: tickets/issues are tracked in the ADIOS_Tickets folder at the top of the
+project (not inside Assets).
