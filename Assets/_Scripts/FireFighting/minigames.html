@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Firefighter - Mini Games</title>
+</head>
+<body>
+
+<h1>Firefighter World - Mini Games</h1>
+<p>The things a firefighter actually does, turned into mini games you play in
+first person. Listed easy to hard. Nothing here is built yet - these are the
+ideas to start from.</p>
+
+<hr>
+
+<h2>1. Put Out the Fire</h2>
+<p><b>Status:</b> to do</p>
+<p><b>What it teaches:</b> the basics of fighting a fire - act fast and aim at the
+base of the flames, not the top.</p>
+<p><b>How you play it:</b> fires break out around the room as glowing flame
+objects. You grab an extinguisher (or hose nozzle), look at a fire, and hold the
+button to spray it. Aim low at the base and it shrinks and goes out. Leave it too
+long and it grows and spreads to the next spot. Put them all out to score. This is
+the firefighter version of Packet Delivery - the simple first game.</p>
+
+<h2>2. Right Extinguisher</h2>
+<p><b>Status:</b> to do</p>
+<p><b>What it teaches:</b> not every fire is put out the same way. A grease fire,
+an electrical fire, and a wood fire each need a different extinguisher, and using
+the wrong one can make it worse.</p>
+<p><b>How you play it:</b> a fire flares up with a symbol over it (a grease pan,
+sparking wires, or burning wood). A rack on the wall has a few labeled
+extinguishers. You read the fire, grab the matching extinguisher, and spray it.
+Right match puts it out and scores. Wrong match flares the fire up and costs you.</p>
+
+<h2>3. Check the Door</h2>
+<p><b>Status:</b> to do</p>
+<p><b>What it teaches:</b> always feel a door for heat before opening it. Opening
+a hot door can let the fire blow out at you.</p>
+<p><b>How you play it:</b> you move through a building with several closed doors.
+Look at a door to check it - a cool door turns green and is safe to open and walk
+through, a hot one turns red and you have to leave it shut and find another way.
+Pick the safe path through the building. Open a hot door and you take a hit and get
+sent back.</p>
+
+<h2>4. Search and Rescue</h2>
+<p><b>Status:</b> to do</p>
+<p><b>What it teaches:</b> get people out of a burning building, and stay low
+because smoke rises and the safe air is near the floor.</p>
+<p><b>How you play it:</b> rooms are filling with smoke near the ceiling, so you
+crouch to move safely (standing in the smoke drains a health/air bar). You search
+the rooms, find trapped people, pick them up and carry them to the exit before the
+timer runs out. Each person you get out scores. More people and thicker smoke on
+harder rounds.</p>
+
+<h2>5. Hook Up the Hydrant</h2>
+<p><b>Status:</b> to do</p>
+<p><b>What it teaches:</b> the water has to get from the supply to the fire. You
+lay out hose and connect it up, and hose only reaches so far.</p>
+<p><b>How you play it:</b> the fire is across the lot from the hydrant or truck.
+You connect hose sections end to end to build a line from the water to the fire.
+Each section only reaches so far, so you route it around obstacles using the
+fewest sections. Once the line connects, the water flows and you put the fire out.
+This is the fire version of Build the Route.</p>
+
+<h2>6. Get Everyone Out</h2>
+<p><b>Status:</b> to do</p>
+<p><b>What it teaches:</b> evacuation - lead people along the safe escape route and
+keep them away from doors and halls that are blocked by fire.</p>
+<p><b>How you play it:</b> a group of people needs to reach the exit, but some
+hallways are blocked by flames. You lead the way and they follow. Pick the route
+that avoids the fire and get the whole group to the exit. Lose people to a blocked
+path and your score drops. Mixes the door checking and rescue ideas into one
+bigger round.</p>
+
+<hr>
+<p>Plan: start with Put Out the Fire so spraying and flames work, then Right
+Extinguisher reuses that. Check the Door and Search and Rescue build the "move
+through a burning building" feel. Hook Up the Hydrant and Get Everyone Out are the
+bigger ones for later.</p>
+
+<p>Note for setup: the player spawner (PlayerManager.cs) currently spawns the fire
+player for a scene named "Chef", but the fire scene is "Firemap". That mapping will
+need a "Firemap" case before this world loads the right player.</p>
+
+</body>
+</html>
