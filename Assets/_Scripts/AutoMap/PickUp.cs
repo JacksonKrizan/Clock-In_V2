@@ -110,9 +110,13 @@ public class PickUp : MonoBehaviour
             heldObj = pickUpObj;
             heldObjRb = pickUpObj.GetComponent<Rigidbody>();
             heldObjRb.isKinematic = true;
-            heldObjRb.transform.parent = holdPos.transform; 
+            heldObjRb.transform.parent = holdPos.transform;
             heldObj.layer = LayerNumber;
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), true);
+
+            // snap it onto holdPos
+            heldObj.transform.localPosition = Vector3.zero;
+            heldObj.transform.localRotation = Quaternion.identity;
         }
     }
     void DropObject()
@@ -125,8 +129,8 @@ public class PickUp : MonoBehaviour
     }
     void MoveObject()
     {
-  
-        heldObj.transform.position = holdPos.transform.position;
+        // keep it pinned to holdPos (parented, so it follows position and rotation)
+        heldObj.transform.localPosition = Vector3.zero;
     }
     void RotateObject()
     {

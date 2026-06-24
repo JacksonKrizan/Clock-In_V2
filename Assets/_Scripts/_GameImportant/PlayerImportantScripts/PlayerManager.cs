@@ -44,7 +44,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             prefabName = "AutoPlayerController";
         }
-        else if (sceneName == "Chef")
+        else if (sceneName == "Firemap")
         {
             prefabName = "FirePlayerController";
         }
