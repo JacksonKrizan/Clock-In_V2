@@ -1,14 +1,14 @@
 using UnityEngine;
+using Photon.Pun;
 
-public class FireHose : MonoBehaviour
+// The hose's water. The holder calls SetSpraying; it broadcasts over the network
+// so every player sees the water play/stop. Needs a PhotonView on the object.
+public class FireHose : MonoBehaviourPun
 {
     [Header("References")]
-    public ParticleSystem waterSystem; 
-    
-    [Header("Controls")]
-    public bool useToggleMode = false; 
+    public ParticleSystem waterSystem;
 
-    private bool _isSpraying = false;
+    bool lastSent;
 
     void Start()
     {
@@ -20,39 +20,22 @@ public class FireHose : MonoBehaviour
         }
     }
 
-    void Update()
+    public void SetSpraying(bool on)
     {
-        // "Fire2" is the standard Unity name for Right Mouse Button
-        if (useToggleMode)
-        {
-            if (Input.GetButtonDown("Fire2"))
-            {
-                _isSpraying = !_isSpraying;
-                UpdateWaterState();
-            }
-        }
+        if (on == lastSent) return; // only send when it actually changes
+        lastSent = on;
+
+        if (PhotonNetwork.IsConnected)
+            photonView.RPC(nameof(SetSprayingRPC), RpcTarget.All, on);
         else
-        {
-            if (Input.GetButtonDown("Fire2"))
-            {
-                _isSpraying = true;
-                UpdateWaterState();
-            }
-            else if (Input.GetButtonUp("Fire2"))
-            {
-                _isSpraying = false;
-                UpdateWaterState();
-            }
-        }
+            SetSprayingRPC(on);
     }
 
-    void UpdateWaterState()
+    [PunRPC]
+    void SetSprayingRPC(bool on)
     {
         if (waterSystem == null) return;
-
-        if (_isSpraying)
-            waterSystem.Play();
-        else
-            waterSystem.Stop();
+        if (on) waterSystem.Play();
+        else waterSystem.Stop();
     }
 }

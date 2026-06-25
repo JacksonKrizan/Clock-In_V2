@@ -2,26 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Photon.Pun;
 
 public class IPdraggable : MonoBehaviour
 {
-  
+
     public GameObject player;
     public Transform holdPos;
     public float throwForce = 500f;
     public float pickUpRange = 5f;
-    private float rotationSensitivity = 1f; 
+    private float rotationSensitivity = 1f;
     private GameObject heldObj;
     private Rigidbody heldObjRb;
-    private bool canDrop = true; 
+    private bool canDrop = true;
     private int LayerNumber;
 
     [SerializeField] List<string> pickUpTags = new List<string>();
     private TestVarList GetVarList;
 
+    private PhotonView myPV;
 
     void Start()
     {
+        myPV = GetComponentInParent<PhotonView>();
+
         LayerNumber = LayerMask.NameToLayer("holdLayer");
         if (LayerNumber == -1)
         {
@@ -31,6 +35,9 @@ public class IPdraggable : MonoBehaviour
     }
     void Update()
     {
+        // only the local player drives their own dragging
+        if (myPV != null && !myPV.IsMine) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             if (heldObj == null)
@@ -80,9 +87,12 @@ public class IPdraggable : MonoBehaviour
             heldObj = pickUpObj;
             heldObjRb = pickUpObj.GetComponent<Rigidbody>();
             heldObjRb.isKinematic = true;
-            heldObjRb.transform.parent = holdPos.transform; 
             heldObj.layer = LayerNumber;
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), true);
+
+            // take ownership so this player drives the packet's synced position
+            PhotonView pv = pickUpObj.GetComponent<PhotonView>();
+            if (pv != null) pv.RequestOwnership();
 
             // if it's a packet, let it pop the HUD up
             Packet packet = pickUpObj.GetComponent<Packet>();
@@ -94,12 +104,11 @@ public class IPdraggable : MonoBehaviour
         Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
         heldObj.layer = 0;
         heldObjRb.isKinematic = false;
-        heldObj.transform.parent = null; 
-        heldObj = null; 
+        heldObj = null;
     }
     void MoveObject()
     {
-  
+        // follow holdPos in world space (no parenting) so PhotonTransformView syncs it
         heldObj.transform.position = holdPos.transform.position;
     }
     void RotateObject()
@@ -127,7 +136,6 @@ public class IPdraggable : MonoBehaviour
         Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
         heldObj.layer = 0;
         heldObjRb.isKinematic = false;
-        heldObj.transform.parent = null;
         heldObjRb.AddForce(transform.forward * throwForce);
         heldObj = null;
     }

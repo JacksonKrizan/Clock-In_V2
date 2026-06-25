@@ -15,6 +15,7 @@ TagManager:
   - canPickUp
   - box
   - Packages
+  - FireHose
   layers:
   - Default
   - TransparentFX

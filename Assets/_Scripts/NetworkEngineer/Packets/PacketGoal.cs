@@ -10,12 +10,15 @@ public class PacketGoal : MonoBehaviour
     {
         if (!collision.gameObject.CompareTag(packetTag)) return;
 
-        // Packets are spawned locally per client, so this delivery only happens on
-        // this client - no IsMine gate needed. Score once, on the first delivery.
         Packet packet = collision.gameObject.GetComponent<Packet>();
-        bool fresh = packet == null || packet.OnDelivered();
+        if (packet == null) return;
 
-        if (fresh && ScoreManager.Instance != null)
+        // packets are networked now: only the owner (the carrier) delivers, so it
+        // happens once and the carrier gets the points. Delivered state syncs to
+        // everyone via the packet's PhotonView.
+        if (PhotonNetwork.IsConnected && !packet.photonView.IsMine) return;
+
+        if (packet.OnDelivered() && ScoreManager.Instance != null)
             ScoreManager.Instance.AddScore(pointsPerDelivery);
     }
 }

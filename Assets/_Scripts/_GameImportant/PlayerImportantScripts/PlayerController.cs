@@ -19,6 +19,10 @@ public class PlayerController : MonoBehaviour
     PhotonView PV;
     [SerializeField] PlayerSettings playerSettings;
 
+    [Header("Spraying")]
+    [SerializeField] Grabbing grabbing;            // the player's grab script
+    [SerializeField] ParticleSystem playerWater;   // built-in spray used when NOT holding a hose
+
     public bool lookAround = true;
 
 
@@ -54,6 +58,10 @@ void Awake()
         {
             playerSettings = FindObjectOfType<PlayerSettings>();
         }
+        if (grabbing == null)
+        {
+            grabbing = GetComponentInChildren<Grabbing>();
+        }
     }
 
     void Update()
@@ -71,6 +79,58 @@ void Awake()
         CursorLockState();
         FallOutOfBoundsCheck();
         Menu();
+        Spray();
+    }
+
+    bool waterOn;
+
+    void Spray()
+    {
+        bool holding = Input.GetButton("Fire2"); // right mouse held
+        FireHose hose = GetHeldHose();
+
+        if (hose != null)
+        {
+            // holding the hose: the hose sprays, the built-in water stays off
+            SetPlayerWater(false);
+            hose.SetSpraying(holding); // hose water sync = step 4 (networked hose)
+        }
+        else
+        {
+            // no hose: the player's own water sprays on right-click
+            SetPlayerWater(holding);
+        }
+    }
+
+    // turn the built-in water on/off and tell other clients so they see it too
+    void SetPlayerWater(bool on)
+    {
+        if (on == waterOn) return;
+        waterOn = on;
+        ApplyPlayerWater(on);
+        if (PhotonNetwork.IsConnected) PV.RPC(nameof(SetWaterRPC), RpcTarget.Others, on);
+    }
+
+    void ApplyPlayerWater(bool on)
+    {
+        if (playerWater == null) return;
+        if (on && !playerWater.isPlaying) playerWater.Play();
+        else if (!on && playerWater.isPlaying) playerWater.Stop();
+    }
+
+    [PunRPC]
+    void SetWaterRPC(bool on)
+    {
+        ApplyPlayerWater(on);
+    }
+
+    // returns the held hose only if the player is holding a FireHose-tagged object
+    FireHose GetHeldHose()
+    {
+        if (grabbing == null) return null;
+        GameObject held = grabbing.HeldObject;
+        if (held == null || !held.CompareTag("FireHose")) return null;
+        return held.GetComponentInChildren<FireHose>();
     }
 
     void Menu()

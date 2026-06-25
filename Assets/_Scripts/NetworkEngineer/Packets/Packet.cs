@@ -83,8 +83,18 @@ public class Packet : MonoBehaviourPun, IPunObservable
     void FallOutOfBoundsCheck()
     {
         if (transform.position.y < -10f)
+            DestroyPacket();
+    }
+
+    // destroy across the network (only the owner may); the spawner refills to max
+    void DestroyPacket()
+    {
+        if (PhotonNetwork.IsConnected)
         {
-            if (packetSpawner != null) packetSpawner.currentPacketCount--;
+            if (photonView.IsMine) PhotonNetwork.Destroy(gameObject);
+        }
+        else
+        {
             Destroy(gameObject);
         }
     }
@@ -118,8 +128,6 @@ public class Packet : MonoBehaviourPun, IPunObservable
     IEnumerator DespawnAfter(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        // lower the count so the spawner makes a new one
-        if (packetSpawner != null) packetSpawner.currentPacketCount--;
-        Destroy(gameObject);
+        DestroyPacket(); // spawner refills to max on its own
     }
 }
