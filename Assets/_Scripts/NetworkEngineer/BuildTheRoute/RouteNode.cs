@@ -8,8 +8,22 @@ public class RouteNode : MonoBehaviour
     public enum NodeType { Router, Source, Destination }
     public NodeType type = NodeType.Router;
 
+    [Header("Models (children of this node)")]
+    [Tooltip("Shown when this node is a plain Router")]
+    [SerializeField] GameObject routerModel;
+    [Tooltip("Shown when this node is the Start or Destination")]
+    [SerializeField] GameObject computerModel;
+
     // neighbours this node is wired to (kept in sync on both ends)
     [HideInInspector] public List<RouteNode> connections = new List<RouteNode>();
+
+    // show the model that matches the current type (router vs computer endpoint)
+    public void ApplyVisual()
+    {
+        bool isEndpoint = type != NodeType.Router; // Source or Destination = computer
+        if (routerModel != null) routerModel.SetActive(!isEndpoint);
+        if (computerModel != null) computerModel.SetActive(isEndpoint);
+    }
 
     public bool IsConnectedTo(RouteNode other) => connections.Contains(other);
 

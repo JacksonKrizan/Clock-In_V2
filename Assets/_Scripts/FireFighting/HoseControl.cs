@@ -22,6 +22,28 @@ public class HoseControl : MonoBehaviourPunCallbacks
         // can't fall on other screens.
         bool kinematic = !photonView.IsMine || heldByActor != 0;
         if (rb.isKinematic != kinematic) rb.isKinematic = kinematic;
+
+        FallOutOfBoundsCheck();
+    }
+
+    // if the hose drops out of the world, the owner removes it; the HoseSpawner
+    // notices the count dropped and spawns a fresh one.
+    void FallOutOfBoundsCheck()
+    {
+        if (transform.position.y < -10f)
+            DestroyHose();
+    }
+
+    void DestroyHose()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            if (photonView.IsMine) PhotonNetwork.Destroy(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     int MyActor => PhotonNetwork.IsConnected ? PhotonNetwork.LocalPlayer.ActorNumber : 1;

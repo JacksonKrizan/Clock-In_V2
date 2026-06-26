@@ -188,8 +188,8 @@ public class RouteManager : MonoBehaviour
         foreach (RouteNode n in nodes) n.connections.Clear();
         ClearSelection();
 
-        // reset every node to a plain router look
-        foreach (RouteNode n in nodes) { n.type = RouteNode.NodeType.Router; RestoreColor(n); }
+        // reset every node to a plain router look (router model on)
+        foreach (RouteNode n in nodes) { n.type = RouteNode.NodeType.Router; n.ApplyVisual(); RestoreColor(n); }
 
         // pick a fresh start + destination
         source = nodes[Random.Range(0, nodes.Count)];
@@ -198,6 +198,9 @@ public class RouteManager : MonoBehaviour
 
         source.type = RouteNode.NodeType.Source;
         destination.type = RouteNode.NodeType.Destination;
+        // swap to the computer model, then tint so you can tell start from destination
+        source.ApplyVisual();
+        destination.ApplyVisual();
         SetColor(source, startColor);
         SetColor(destination, destinationColor);
     }
