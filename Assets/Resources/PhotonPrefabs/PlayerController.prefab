@@ -1790,6 +1790,8 @@ MonoBehaviour:
   jumpForce: 15.67
   smoothTime: 0.15
   playerSettings: {fileID: 0}
+  grabbing: {fileID: 0}
+  playerWater: {fileID: 0}
   lookAround: 1
 --- !u!114 &3295001617285701011
 MonoBehaviour:
