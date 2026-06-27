@@ -11,6 +11,9 @@ public class Grabbing : MonoBehaviour
     public float pickUpRange = 5f;
     public List<string> pickUpTags = new List<string>(); // only these tags can be grabbed
 
+    [Header("HUD")]
+    [TextArea][SerializeField] string hoseHowTo = "Hold right-click while the hose is equipped to put out the fires.";
+
     GameObject heldObj;
     public GameObject HeldObject => heldObj; // what the player is currently holding (null if nothing)
 
@@ -45,6 +48,10 @@ public class Grabbing : MonoBehaviour
 
             heldObj = hit.transform.gameObject;
             rb.isKinematic = true;
+
+            // grabbing the hose -> show the fire mini-game how-to
+            if (heldObj.GetComponent<FireHose>() != null && MiniGameHUD.Instance != null)
+                MiniGameHUD.Instance.SetHowTo(hoseHowTo);
         }
     }
 

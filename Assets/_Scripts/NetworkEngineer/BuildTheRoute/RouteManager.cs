@@ -37,7 +37,7 @@ public class RouteManager : MonoBehaviour
     public float reach = 100f;
 
     // shown in the shared HUD's how-to box
-    const string HowTo = "Connect the <color=#3399FF>BLUE start</color> to the <color=#FF4D4D>RED destination</color> using the fewest connections.";
+    const string HowTo = "Connect the two laptops with the routers by clicking on them.";
 
     class Link { public RouteNode a, b; public LineRenderer line; }
 
