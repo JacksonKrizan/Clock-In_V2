@@ -1,5 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 
 // A single fire. The master client owns the true intensity and streams it to
 // everyone via this object's PhotonView (add the PhotonView and put this Fire in
@@ -22,6 +23,10 @@ public class Fire : MonoBehaviourPun, IPunObservable
     [Tooltip("Shown above the building while it is on fire (e.g. an icon/arrow)")]
     [SerializeField] private GameObject alertMarker;
     [SerializeField] private string buildingName = "a building";
+
+    [Header("Scoring")]
+    [Tooltip("Points awarded to whoever puts this fire out")]
+    [SerializeField] private int pointsForPutOut = 10;
 
     private bool wasBurning;
 
@@ -69,13 +74,27 @@ public class Fire : MonoBehaviourPun, IPunObservable
         if (Application.isPlaying && PhotonNetwork.IsConnected)
             photonView.RPC(nameof(ReduceRPC), RpcTarget.MasterClient, amount);
         else
-            ReduceRPC(amount);
+            ApplyExtinguish(amount, PhotonNetwork.LocalPlayer); // offline: credit yourself
     }
 
     [PunRPC]
-    void ReduceRPC(float amount)
+    void ReduceRPC(float amount, PhotonMessageInfo info)
     {
+        // runs on the master; info.Sender is the player whose water hit the fire
+        ApplyExtinguish(amount, info.Sender);
+    }
+
+    // reduce intensity and, if this hit puts the fire out, reward whoever did it
+    void ApplyExtinguish(float amount, Player credit)
+    {
+        float before = currentIntensity;
         currentIntensity = Mathf.Clamp01(currentIntensity - amount);
+
+        if (before > 0f && currentIntensity <= 0f &&
+            credit != null && ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.AddScore(credit, pointsForPutOut);
+        }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
