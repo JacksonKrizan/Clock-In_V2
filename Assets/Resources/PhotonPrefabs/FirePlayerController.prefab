@@ -3393,10 +3393,10 @@ MonoBehaviour:
   m_text: 'Put out the fires and keep the buildings safe!
 
 
-    There are hoses
-    for every player inside the fire station. Your job is to grab one and put out
-    all the fires around town. Once a fire start above buildings there will be a
-    green indicator.
+    There are hoses for
+    every player inside the fire station. Your job is to grab one and put out all
+    the fires around town. Once a fire start above buildings there will be a green
+    indicator.
 
 '
   m_isRightToLeft: 0
