@@ -1,65 +1,70 @@
 Clock-In - where stuff lives
-=============================
+------------------------------
 
-Quick notes on what each folder in Assets is for, so you don't have to dig around.
+Notes on what each folder in Assets is actually for, so nobody has to go
+clicking through everything to find one script. Add to this when you move things
+around.
 
 
-SCENES
+Scenes
 ------
-_Scenes/        the real game scenes:
-                  _Menu        - main menu / lobby
-                  GameDev      - network engineer world
-                  AutoShop     - auto mechanic world
-                  Firemap      - firefighter world
-                  Chef         - old kitchen world (not worked on anymore)
-                  TestFeild    - scratch scene for testing
-                (the other .unity files around the project are demo scenes that
-                 came with downloaded asset packs - ignore them)
+_Scenes/    the scenes we actually use:
+              _Menu      main menu + lobby
+              GameDev    network engineer world
+              AutoShop   auto mechanic world
+              Firemap    firefighter world
+              TestFeild  junk scene for trying things out
+
+There are a bunch of other .unity files scattered around the project. Those came
+with the asset packs we downloaded (demo scenes). Ignore them, they're not ours.
+The old Chef/kitchen world got cut, so it's not in here anymore.
 
 
-OUR CODE
+Our code
 --------
-_Scripts/       all the code we wrote. broken down by area:
+_Scripts/   everything we wrote, split up by world:
 
-  _GameImportant/        core stuff used everywhere
-    Menu/                main menu, lobby, room list, joining rooms
-    Menu/options/        the map/job picker buttons
-    PlayerImportantScripts/  player movement, camera, name tag, spawning
-    Score/               ScoreManager (points) and Scoreboard (T to view)
-    UI/                  MiniGameHUD - the shared mini-game ui panel
+  _GameImportant/   the stuff that runs no matter which world you're in
+    Menu/                   main menu, lobby, room list, joining/leaving rooms
+    Menu/options/           the buttons that pick which job/map to load
+    PlayerImportantScripts/ moving, camera, the name above your head, spawning the player, the join tutorial panel, esc-to-quit
+    Score/                  ScoreManager (the points) + Scoreboard (press T)
+    UI/                     MiniGameHUD, the one shared panel every game uses
 
-  NetworkEngineer/       the network engineer world
-    Packets/             packet delivery game (tiles, packets, goal)
-    BuildTheRoute/       build the route game (nodes + cables)
+  NetworkEngineer/  network engineer world
+    Packets/                carry the packet to the goal (tiles, packets, goal)
+    BuildTheRoute/          wire the laptops together through routers
 
-  AutoMap/               auto mechanic world (car parts, pickup)
-  Kitchen/               old chef world (not used)
-  _Editor/               editor-only helper (loads menu first when you hit play)
+  FireFighting/     firefighter world - fires, the hose, putting them out, spawning hoses, the fire alerts
 
+  AutoMap/          auto mechanic world - picking up car parts
+    Arc/                    arc/throw helper bits
 
-PHOTON (multiplayer)
---------------------
-Photon/             the Photon PUN networking plugin
-PhotonMenuPrefabs/  networked prefabs (player manager, etc)
-Resources/          prefabs Photon spawns at runtime live here mosly player prefabs
+  _Editor/          editor-only. makes Play start from the menu instead of whatever scene you happen to have open
 
 
-ART / LEVEL PIECES (mostly downloaded packs)
+Photon (the multiplayer)
+------------------------
+Photon/             the Photon PUN plugin itself, don't touch
+PhotonMenuPrefabs/  networked prefabs used by the menu
+Resources/          anything Photon spawns at runtime HAS to live in here. PhotonPrefabs/ is the player controllers, the packet, the hose, the player manager
+
+
+Art and map pieces (mostly downloaded packs)
 --------------------------------------------
-MapBuilding/        office and server room pieces for building the maps
-CarMapPrefabs/      cars and garage stuff for the auto shop
-kitchen assets/     food + firefighter models
-MapPrefabsRandoms/  skyboxes, icons, extra bits
-Materials/          materials and textures
-UI_Prefabs/         button and menu graphics
-SpawnPoints/        spawn point prefabs
+_MapBuilding/   the building blocks for the maps:
+                  CarMapPrefabs   cars + garage stuff for the auto shop
+                  FireAssests     firefighter models and fire map pieces
+                  NetworkDev      office / server room pieces
+                  MenuBuilding    set dressing behind the menu
+Materials/      materials and textures
+UI_Prefabs/     buttons and menu graphics
+_UI/            menu backgrounds and logo art
+MapPrefabsRandoms/  skyboxes, icons, leftover odds and ends
+SpawnPoints/    spawn point prefabs
 
 
-OTHER
+Other
 -----
-docs/               the project / presentation html
-ExternalDependencyManager/  tool Photon needs, leave it alone
-
-
-note: tickets/issues are tracked in the ADIOS_Tickets folder at the top of the
-project (not inside Assets).
+docs/                       the presentation / writeup html
+ExternalDependencyManager/  a tool Photon needs to pull its dependencies. leave it alone

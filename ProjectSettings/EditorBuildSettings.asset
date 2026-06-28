@@ -6,15 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_Scenes/TestFeild.unity
+    guid: 5f5ec71da8f67934c89cf9bf2c3bdf67
+  - enabled: 0
     path: Assets/_Scenes/_Menu.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/GameDev.unity
     guid: 53b095f194bc5c94fa1c6f8f6bff0e7f
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/Firemap.unity
     guid: 7759de288f5d4ee449a0ca5e2244944a
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/AutoShop.unity
     guid: 7008481848df7f64c940e60d30ca9a44
   m_configObjects: {}
