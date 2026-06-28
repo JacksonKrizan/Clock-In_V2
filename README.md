@@ -12,6 +12,8 @@ This has been a project worked on by three creators.
 ======================================
 Clone or download, then unzip and open the folder in Unity Hub.
 
+The game is also at https://bluedingoes.com/ to run the web version
+
 
 
 *****Controls vary on each map, but here are the basics*****
